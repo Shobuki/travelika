@@ -1,13 +1,496 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-  <meta charset="utf-8">
-  <title>Travelika</title>
-  <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Travelika — Global Forest Visit Pass</title>
+  <!-- Primary SEO -->
+  <meta name="description"
+    content="Travelika handles permits & park entry tickets, transport, and lodging for forests around the world. Pick a forest, set your dates, and book your visit pass.">
+  <link rel="canonical" href="https://travelika.example/">
+  <meta name="robots" content="index,follow">
+  <meta name="theme-color" content="#041b18">
+
+  <!-- Icons (replace when ready) -->
+  <link rel="icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <!-- Open Graph -->
+  <meta property="og:locale" content="en_US">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Travelika — Global Forest Visit Pass">
+  <meta property="og:description"
+    content="Permits & entry tickets, transport, and lodging handled. Choose your forest & dates—we’ll handle the rest.">
+  <meta property="og:url" content="https://travelika.example/">
+  <meta property="og:site_name" content="Travelika">
+  <meta property="og:image" content="/section1.jpg">
+  <meta property="og:image:alt" content="Misty green forest canopy">
+  <meta property="og:image:width" content="1600">
+  <meta property="og:image:height" content="900">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Travelika — Global Forest Visit Pass">
+  <meta name="twitter:description"
+    content="Permits & entry tickets, transport, and lodging handled. Choose your forest & dates—we’ll handle the rest.">
+  <meta name="twitter:image" content="/section1.jpg">
+
+  <!-- Preload hero for LCP -->
+  <link rel="preload" as="image" href="./section1.jpg" imagesrcset="./section1.jpg" imagesizes="100vw">
+  <link rel="preload" as="image" href="./section2.jpg" imagesrcset="/section2.jpg" imagesizes="100vw">
+
+  <!-- JSON-LD: Organization -->
+  <script type="application/ld+json">{
+    "@context":"https://schema.org",
+    "@type":"Organization",
+    "name":"Travelika",
+    "url":"https://travelika.example/",
+    "logo":"https://travelika.example/logo.png",
+    "contactPoint":[{
+      "@type":"ContactPoint",
+      "contactType":"customer support",
+      "availableLanguage":["id","en"],
+      "areaServed":"Worldwide"
+    }]
+  }</script>
+
+  <!-- JSON-LD: Website -->
+  <script type="application/ld+json">{
+    "@context":"https://schema.org",
+    "@type":"WebSite",
+    "name":"Travelika",
+    "url":"https://travelika.example/"
+  }</script>
+
+  <!-- JSON-LD: Destinations (ItemList of TouristTrip) -->
+  <script type="application/ld+json">{
+    "@context":"https://schema.org",
+    "@type":"ItemList",
+    "itemListElement":[
+      {"@type":"ListItem","position":1,"item":{"@type":"TouristTrip","name":"Amazon, Brazil — Forest Pass","image":"https://travelika.example/images/forests/amazon.jpg","offers":{"@type":"Offer","price":"900000","priceCurrency":"IDR","availability":"https://schema.org/InStock","url":"https://travelika.example/#pesan"}}},
+      {"@type":"ListItem","position":2,"item":{"@type":"TouristTrip","name":"Borneo, Indonesia — Forest Pass","image":"https://travelika.example/images/forests/borneo.jpg","offers":{"@type":"Offer","price":"700000","priceCurrency":"IDR","availability":"https://schema.org/InStock","url":"https://travelika.example/#pesan"}}},
+      {"@type":"ListItem","position":3,"item":{"@type":"TouristTrip","name":"Black Forest, Germany — Forest Pass","image":"https://travelika.example/images/forests/black-forest.jpg","offers":{"@type":"Offer","price":"650000","priceCurrency":"IDR","availability":"https://schema.org/InStock","url":"https://travelika.example/#pesan"}}},
+      {"@type":"ListItem","position":4,"item":{"@type":"TouristTrip","name":"Tongass, Alaska — Forest Pass","image":"https://travelika.example/images/forests/tongass.jpg","offers":{"@type":"Offer","price":"800000","priceCurrency":"IDR","availability":"https://schema.org/InStock","url":"https://travelika.example/#pesan"}}},
+      {"@type":"ListItem","position":5,"item":{"@type":"TouristTrip","name":"Daintree, Australia — Forest Pass","image":"https://travelika.example/images/forests/daintree.jpg","offers":{"@type":"Offer","price":"680000","priceCurrency":"IDR","availability":"https://schema.org/InStock","url":"https://travelika.example/#pesan"}}},
+      {"@type":"ListItem","position":6,"item":{"@type":"TouristTrip","name":"Olympic, USA — Forest Pass","image":"https://travelika.example/images/forests/olympic.jpg","offers":{"@type":"Offer","price":"720000","priceCurrency":"IDR","availability":"https://schema.org/InStock","url":"https://travelika.example/#pesan"}}}
+    ]
+  }</script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            blend: '#041b18', // deep green sampled from the bottom of the photo
+            accent: '#138374' // accent tone
+          },
+          boxShadow: { brand: '0 10px 30px rgba(0,0,0,.25)' }
+        }
+      }
+    }
+  </script>
 </head>
-<body>
-  <app-root></app-root>
+
+<body class="min-h-screen bg-slate-50 text-slate-900">
+  <!-- Header -->
+  <div data-include="/components/header.html"></div>
+
+  <main>
+    <!-- HERO: Global Forest Visit Pass -->
+    <section class="relative min-h-screen grid place-items-center text-white text-center"
+      style="background-image:url('./section1.jpg'); background-size:cover; background-position:center;">
+      <div class="absolute inset-0 bg-gradient-to-b from-transparent via-[rgba(4,27,24,0.65)] to-blend"></div>
+      <div class="relative container mx-auto px-4 pt-32 pb-20">
+        <h1 class="text-4xl md:text-5xl font-semibold leading-tight mb-3">Visit the World’s Forests<br
+            class="hidden sm:block" />with One Pass</h1>
+        <p class="opacity-90 text-base md:text-lg max-w-2xl mx-auto">Travelika arranges <strong>permits & park entry
+            tickets</strong>, <strong>transport</strong>, and <strong>lodging</strong>—you just choose the forest,
+          dates, and guest count.</p>
+        <div class="mt-6 flex flex-wrap gap-3 justify-center">
+          <a class="px-5 py-3 rounded-xl font-bold bg-accent text-blend hover:brightness-110" href="#pesan">Check
+            Availability</a>
+          <a class="px-5 py-3 rounded-xl font-bold border border-white/40 text-white bg-white/10 hover:bg-white/20"
+            href="#cara">See How It Works</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- BOOKING -->
+    <section id="pesan" class="bg-blend text-teal-50 py-12 md:py-16">
+      <div class="container mx-auto px-4 grid gap-6 md:grid-cols-[1.15fr_.85fr] items-center">
+        <div class="space-y-3">
+          <span
+            class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm bg-white/10 border border-white/25">🌲
+            Visit Pass • Permits handled</span>
+          <h2 class="text-2xl font-semibold">Book a Visit Pass</h2>
+          <p class="text-teal-100/80">Choose your forest, dates, pickup point, and package. We’ll arrange transport &
+            lodging to match.</p>
+          <ul class="text-teal-100/80 text-sm list-disc ml-5">
+            <li>Prices are simulated—final at checkout.</li>
+            <li>Some locations require passports & specific vaccinations.</li>
+          </ul>
+        </div>
+
+        <form class="grid grid-cols-12 gap-4 bg-white/10 border border-white/30 rounded-2xl p-5 shadow-brand"
+          id="bookingForm">
+          <!-- Forest -->
+          <div class="col-span-12 md:col-span-6 flex flex-col gap-2">
+            <label for="forest" class="text-sm opacity-90">Select Forest</label>
+            <select id="forest" required
+              class="w-full rounded-lg px-3 py-3 bg-black/30 border border-white/40 text-teal-50 focus:outline-none focus:ring-2 focus:ring-accent">
+              <option value="AMAZON" data-base="900000">Amazon, Brazil</option>
+              <option value="BORNEO" data-base="700000">Kalimantan (Borneo), Indonesia</option>
+              <option value="BLACK_FOREST" data-base="650000">Black Forest, Germany</option>
+              <option value="TONGASS" data-base="800000">Tongass, Alaska</option>
+              <option value="AOKIGAHARA" data-base="600000">Aokigahara, Japan</option>
+            </select>
+          </div>
+          <!-- Pickup -->
+          <div class="col-span-12 md:col-span-6 flex flex-col gap-2">
+            <label for="pickup" class="text-sm opacity-90">Pickup Point (City/Airport)</label>
+            <select id="pickup" required
+              class="w-full rounded-lg px-3 py-3 bg-black/30 border border-white/40 text-teal-50 focus:outline-none focus:ring-2 focus:ring-accent">
+              <option value="CGK">Jakarta (CGK)</option>
+              <option value="SIN">Singapore (SIN)</option>
+              <option value="MAO">Manaus (MAO)</option>
+              <option value="MUC">Munich (MUC)</option>
+              <option value="NRT">Tokyo (NRT)</option>
+            </select>
+          </div>
+
+          <!-- Dates -->
+          <div class="col-span-12 md:col-span-6 flex flex-col gap-2">
+            <label for="dateIn" class="text-sm opacity-90">Arrival Date</label>
+            <input id="dateIn" type="date" required
+              class="w-full rounded-lg px-3 py-3 bg-black/30 border border-white/40 text-teal-50 placeholder-teal-200/60 focus:outline-none focus:ring-2 focus:ring-accent" />
+          </div>
+          <div class="col-span-12 md:col-span-6 flex flex-col gap-2">
+            <label for="dateOut" class="text-sm opacity-90">Departure Date</label>
+            <input id="dateOut" type="date"
+              class="w-full rounded-lg px-3 py-3 bg-black/30 border border-white/40 text-teal-50 placeholder-teal-200/60 focus:outline-none focus:ring-2 focus:ring-accent" />
+          </div>
+
+          <!-- Guests & Package -->
+          <div class="col-span-12 md:col-span-6 flex flex-col gap-2">
+            <label for="guests" class="text-sm opacity-90">Guests</label>
+            <input id="guests" type="number" min="1" value="1" required
+              class="w-full rounded-lg px-3 py-3 bg-black/30 border border-white/40 text-teal-50 focus:outline-none focus:ring-2 focus:ring-accent" />
+          </div>
+          <div class="col-span-12 md:col-span-6 flex flex-col gap-2">
+            <label for="pkg" class="text-sm opacity-90">Package</label>
+            <select id="pkg"
+              class="w-full rounded-lg px-3 py-3 bg-black/30 border border-white/40 text-teal-50 focus:outline-none focus:ring-2 focus:ring-accent">
+              <option value="base" data-multiplier="1">Base</option>
+              <option value="explorer" data-multiplier="1.4">Explorer</option>
+              <option value="expedition" data-multiplier="1.9">Expedition</option>
+            </select>
+          </div>
+
+          <!-- Add-ons -->
+          <div class="col-span-12 grid grid-cols-1 md:grid-cols-3 gap-3">
+            <label class="inline-flex items-center gap-2 text-sm"><input id="needTransport" type="checkbox"
+                class="accent-accent" checked /> Include Transport</label>
+            <label class="inline-flex items-center gap-2 text-sm"><input id="needLodging" type="checkbox"
+                class="accent-accent" checked /> Include Lodging</label>
+            <label class="inline-flex items-center gap-2 text-sm"><input id="dayTrip" type="checkbox"
+                class="accent-accent" /> Day Trip (no stay)</label>
+          </div>
+
+          <div class="col-span-12 flex justify-end gap-2">
+            <button type="reset"
+              class="px-4 py-3 rounded-lg font-bold border border-white/40 text-white bg-white/10 hover:bg-white/20">Reset</button>
+            <button type="submit" class="px-4 py-3 rounded-lg font-bold bg-accent text-blend hover:brightness-110">Check
+              & Save</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- FEATURED DESTINATIONS -->
+    <section id="destinasi" class="py-16 bg-white">
+      <div class="container mx-auto px-4">
+        <div class="flex items-end justify-between flex-wrap gap-3 mb-6">
+          <h2 class="text-2xl font-semibold">Featured Forest Destinations</h2>
+          <a href="#pesan"
+            class="text-sm px-3 py-2 rounded-lg bg-accent text-blend font-semibold hover:brightness-110">Check
+            Availability</a>
+        </div>
+        <p class="text-slate-600 mb-6 max-w-3xl">Iconic forests around the world you can visit with a Travelika Pass.
+          Images and prices are illustrative.</p>
+        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <!-- Amazon -->
+          <div class="bg-white rounded-xl overflow-hidden border border-slate-200 shadow">
+            <img src="images/forests/amazon.jpg" alt="Amazon Rainforest, Brazil" loading="lazy"
+              class="w-full h-52 object-cover">
+            <div class="p-4">
+              <div class="flex items-center justify-between">
+                <h3 class="font-semibold">Amazon, Brazil</h3>
+                <span class="text-xs px-2 py-1 rounded bg-emerald-50 text-emerald-700">From ~ IDR 900k</span>
+              </div>
+              <p class="text-slate-600 mt-1">Vast river systems, dense canopy, and the planet’s richest biodiversity.
+              </p>
+            </div>
+          </div>
+          <!-- Borneo -->
+          <div class="bg-white rounded-xl overflow-hidden border border-slate-200 shadow">
+            <img src="images/forests/borneo.jpg" alt="Borneo Rainforest, Indonesia" loading="lazy"
+              class="w-full h-52 object-cover">
+            <div class="p-4">
+              <div class="flex items-center justify-between">
+                <h3 class="font-semibold">Borneo, Indonesia</h3>
+                <span class="text-xs px-2 py-1 rounded bg-emerald-50 text-emerald-700">From ~ IDR 700k</span>
+              </div>
+              <p class="text-slate-600 mt-1">Home of orangutans, peat swamps, and enchanting river routes.</p>
+            </div>
+          </div>
+          <!-- Black Forest -->
+          <div class="bg-white rounded-xl overflow-hidden border border-slate-200 shadow">
+            <img src="images/forests/black-forest.jpg" alt="Black Forest, Germany" loading="lazy"
+              class="w-full h-52 object-cover">
+            <div class="p-4">
+              <div class="flex items-center justify-between">
+                <h3 class="font-semibold">Black Forest, Germany</h3>
+                <span class="text-xs px-2 py-1 rounded bg-emerald-50 text-emerald-700">From ~ IDR 650k</span>
+              </div>
+              <p class="text-slate-600 mt-1">Misty pines, timber villages, and classic hiking trails.</p>
+            </div>
+          </div>
+          <!-- Tongass -->
+          <div class="bg-white rounded-xl overflow-hidden border border-slate-200 shadow">
+            <img src="images/forests/tongass.jpg" alt="Tongass National Forest, Alaska" loading="lazy"
+              class="w-full h-52 object-cover">
+            <div class="p-4">
+              <div class="flex items-center justify-between">
+                <h3 class="font-semibold">Tongass, Alaska</h3>
+                <span class="text-xs px-2 py-1 rounded bg-emerald-50 text-emerald-700">From ~ IDR 800k</span>
+              </div>
+              <p class="text-slate-600 mt-1">Temperate rainforest, glaciers, and iconic North American wildlife.</p>
+            </div>
+          </div>
+          <!-- Daintree -->
+          <div class="bg-white rounded-xl overflow-hidden border border-slate-200 shadow">
+            <img src="images/forests/daintree.jpg" alt="Daintree Rainforest, Australia" loading="lazy"
+              class="w-full h-52 object-cover">
+            <div class="p-4">
+              <div class="flex items-center justify-between">
+                <h3 class="font-semibold">Daintree, Australia</h3>
+                <span class="text-xs px-2 py-1 rounded bg-emerald-50 text-emerald-700">From ~ IDR 680k</span>
+              </div>
+              <p class="text-slate-600 mt-1">Ancient coastal rainforest near the Great Barrier Reef—unique and
+                photogenic.</p>
+            </div>
+          </div>
+          <!-- Olympic -->
+          <div class="bg-white rounded-xl overflow-hidden border border-slate-200 shadow">
+            <img src="images/forests/olympic.jpg" alt="Olympic National Park, United States" loading="lazy"
+              class="w-full h-52 object-cover">
+            <div class="p-4">
+              <div class="flex items-center justify-between">
+                <h3 class="font-semibold">Olympic, USA</h3>
+                <span class="text-xs px-2 py-1 rounded bg-emerald-50 text-emerald-700">From ~ IDR 720k</span>
+              </div>
+              <p class="text-slate-600 mt-1">Lush moss, wild beaches, and mountains in a single park.</p>
+            </div>
+          </div>
+        </div>
+        <div class="mt-6 flex justify-center">
+          <a href="#pesan" class="px-5 py-3 rounded-xl font-bold bg-accent text-blend hover:brightness-110">Book a Pass
+            for These Destinations</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section id="cara" class="py-16 bg-slate-50">
+      <div class="container mx-auto px-4">
+        <h2 class="text-2xl font-semibold text-center mb-8">How Travelika Works</h2>
+        <div class="grid gap-4 md:grid-cols-3">
+          <div class="bg-white rounded-xl p-5 border border-slate-200 shadow">
+            <div class="text-xl font-bold mb-2">1. Choose & Schedule</div>
+            <p class="text-slate-600">Pick your forest, dates, pickup point, and package. Our system shows an instant
+              cost estimate.</p>
+          </div>
+          <div class="bg-white rounded-xl p-5 border border-slate-200 shadow">
+            <div class="text-xl font-bold mb-2">2. We Handle Everything</div>
+            <p class="text-slate-600">Park permits/tickets, licensed local rangers, transport, and lodging. You just
+              verify documents and pay.</p>
+          </div>
+          <div class="bg-white rounded-xl p-5 border border-slate-200 shadow">
+            <div class="text-xl font-bold mb-2">3. Go</div>
+            <p class="text-slate-600">Meet your guide at the pickup point on the day. Enjoy a safe, comfortable forest
+              exploration.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BENEFITS -->
+    <section id="keunggulan" class="py-16 bg-slate-50">
+      <div class="container mx-auto px-4">
+        <h2 class="text-2xl font-semibold text-center mb-6">Why choose Travelika?</h2>
+        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div class="bg-white rounded-xl p-4 border border-slate-200 shadow">
+            <img src="images/features/transparan.jpg" alt="Permits & park entry arranged" loading="lazy"
+              class="w-full h-40 object-cover rounded-lg mb-3">
+            <h3 class="font-semibold mb-1">Permits & Tickets</h3>
+            <p class="text-slate-600">We handle permits and park entry in line with local regulations.</p>
+          </div>
+          <div class="bg-white rounded-xl p-4 border border-slate-200 shadow">
+            <img src="images/features/dukungan.jpg" alt="Integrated transport & lodging" loading="lazy"
+              class="w-full h-40 object-cover rounded-lg mb-3">
+            <h3 class="font-semibold mb-1">Transport & Lodging</h3>
+            <p class="text-slate-600">Airport pickup, transfers, and stays tailored to your package.</p>
+          </div>
+          <div class="bg-white rounded-xl p-4 border border-slate-200 shadow">
+            <img src="images/features/fleksibel.jpg" alt="Licensed local rangers" loading="lazy"
+              class="w-full h-40 object-cover rounded-lg mb-3">
+            <h3 class="font-semibold mb-1">Local Rangers</h3>
+            <p class="text-slate-600">Licensed guides & itineraries that adapt to nature’s conditions.</p>
+          </div>
+          <div class="bg-white rounded-xl p-4 border border-slate-200 shadow">
+            <img src="images/features/terpercaya.jpg" alt="Insurance & safety" loading="lazy"
+              class="w-full h-40 object-cover rounded-lg mb-3">
+            <h3 class="font-semibold mb-1">Insurance & Safety</h3>
+            <p class="text-slate-600">Safety briefings, basic gear, and travel insurance.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA: What are you waiting for (text over the sky) -->
+    <section id="ayo" class="relative min-h-[50vh] md:min-h-[60vh] grid place-items-center text-white text-center"
+      style="background-image:url('https://c.pxhere.com/photos/12/43/bird%27s_eye_view_cold_daylight_environment_fog_foggy_landscape_nature-1560621.jpg!d'); background-size:cover; background-position:top;">
+      <!-- Overlay 1: darken the sky -->
+      <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-transparent"></div>
+      <!-- Overlay 2: central focus for better text contrast -->
+      <div
+        class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.55)_0%,rgba(0,0,0,0.35)_40%,transparent_70%)] mix-blend-multiply">
+      </div>
+
+      <div class="relative container mx-auto px-4 py-16">
+        <h2 class="text-4xl md:text-5xl font-extrabold tracking-tight
+               drop-shadow-[0_3px_10px_rgba(0,0,0,0.75)]">
+          What are you waiting for?
+        </h2>
+        <p class="mt-3 max-w-2xl mx-auto text-white/95
+              drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]">
+          Get your Travelika Pass to visit forests around the world. Permits, transport, and lodging—all arranged.
+        </p>
+        <div class="mt-5 flex gap-3 justify-center flex-wrap">
+          <a href="#pesan" class="px-5 py-3 rounded-xl font-bold bg-accent text-blend hover:brightness-110 shadow-md">
+            Book Now
+          </a>
+          <a href="#destinasi"
+            class="px-5 py-3 rounded-xl font-bold border border-white/50 text-white/95 bg-white/15 hover:bg-white/25 shadow-md">
+            See Destinations
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CLOSER: Forest hero blending into the sky from the section above -->
+    <section class="relative min-h-[70vh] grid place-items-end text-white text-center"
+      style="background-image:url('https://c.pxhere.com/photos/12/43/bird%27s_eye_view_cold_daylight_environment_fog_foggy_landscape_nature-1560621.jpg!d'); background-size:cover; background-position:center;">
+      <div class="absolute inset-0 bg-gradient-to-b from-transparent via-black/10 to-blend"></div>
+      <div class="relative container mx-auto px-4 py-12">
+        <a href="#pesan"
+          class="inline-block px-5 py-3 rounded-xl font-bold bg-accent text-blend hover:brightness-110">Start
+          Booking</a>
+      </div>
+    </section>
+  </main>
+
+  <div data-include="/components/footer.html"></div>
+
+  <script>
+    // Refs
+    const forest = document.getElementById('forest');
+    const pickup = document.getElementById('pickup');
+    const dateIn = document.getElementById('dateIn');
+    const dateOut = document.getElementById('dateOut');
+    const guests = document.getElementById('guests');
+    const pkg = document.getElementById('pkg');
+    const needTransport = document.getElementById('needTransport');
+    const needLodging = document.getElementById('needLodging');
+    const dayTrip = document.getElementById('dayTrip');
+
+    // Cookie helpers
+    const setCookie = (name, value, days = 7) => {
+      const d = new Date(); d.setTime(d.getTime() + days * 24 * 60 * 60 * 1000);
+      let cookie = `${name}=${encodeURIComponent(value)};expires=${d.toUTCString()};path=/;SameSite=Lax`;
+      if (location.protocol === 'https:') cookie += ';Secure';
+      document.cookie = cookie;
+    };
+    const getCookie = (name) => { const v = document.cookie.split('; ').find(r => r.startsWith(name + '=')); return v ? decodeURIComponent(v.split('=')[1]) : ''; };
+
+    // Prefill
+    try {
+      const saved = getCookie('travelika_visit');
+      if (saved) {
+        const d = JSON.parse(saved);
+        forest.value = d.forest || forest.value;
+        pickup.value = d.pickup || pickup.value;
+        dateIn.value = d.dateIn || '';
+        dateOut.value = d.dateOut || '';
+        guests.value = d.guests || 1;
+        pkg.value = d.pkg || 'base';
+        needTransport.checked = d.needTransport ?? true;
+        needLodging.checked = d.needLodging ?? true;
+        dayTrip.checked = d.dayTrip ?? false;
+      }
+    } catch { }
+
+    // Min date = today
+    const today = new Date();
+    const yyyy = today.getFullYear(); const mm = String(today.getMonth() + 1).padStart(2, '0'); const dd = String(today.getDate()).padStart(2, '0');
+    const minDate = `${yyyy}-${mm}-${dd}`; dateIn.min = minDate; dateOut.min = minDate;
+
+    // Day trip toggles checkout date
+    dayTrip.addEventListener('change', (e) => { dateOut.disabled = e.target.checked; if (e.target.checked) dateOut.value = ''; });
+    dateIn.addEventListener('change', () => { dateOut.min = dateIn.value || minDate; if (dateOut.value && dateOut.value < dateOut.min) dateOut.value = ''; });
+
+    // Calc helper
+    function diffDays(a, b) { const A = new Date(a), B = new Date(b); const ms = (B - A) / (1000 * 60 * 60 * 24); return Math.max(1, Math.round(ms)); }
+
+    document.getElementById('bookingForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const base = Number(forest.options[forest.selectedIndex].dataset.base || 0); // base / person / day
+      const pax = Math.max(1, Number(guests.value || 1));
+      const mult = Number(pkg.options[pkg.selectedIndex].dataset.multiplier || 1);
+      const days = dayTrip.checked ? 1 : diffDays(dateIn.value, dateOut.value || dateIn.value);
+      const nights = Math.max(0, days - 1);
+
+      // Add-ons (simple estimate)
+      const transportPerPerson = 350000; // pickup-dropoff
+      const lodgingPerNightPerPerson = 450000; // lodge/camp
+
+      const passCost = base * pax * days * mult;
+      const transportCost = needTransport.checked ? (transportPerPerson * pax) : 0;
+      const lodgingCost = (needLodging.checked && nights > 0) ? (lodgingPerNightPerPerson * pax * nights) : 0;
+      const subtotal = passCost + transportCost + lodgingCost;
+
+      const payload = { forest: forest.value, pickup: pickup.value, dateIn: dateIn.value, dateOut: dayTrip.checked ? '' : dateOut.value, dayTrip: dayTrip.checked, guests: pax, pkg: pkg.value, needTransport: needTransport.checked, needLodging: needLodging.checked, subtotal };
+      setCookie('travelika_visit', JSON.stringify(payload), 7);
+
+      const fmt = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' });
+      const msg = `Simulation Summary
+
+Forest: ${forest.options[forest.selectedIndex].text}
+Pickup: ${pickup.value}
+Dates: ${dateIn.value}${dayTrip.checked ? ' (day trip)' : ' — ' + (dateOut.value || '-')}
+Guests: ${pax} | Package: ${pkg.value}
+Transport: ${needTransport.checked ? 'Yes' : 'No'} | Lodging: ${needLodging.checked ? 'Yes' : 'No'}
+
+Estimated cost: ${fmt.format(subtotal)}
+
+Data saved to cookies (7 days). Proceed to checkout to confirm & pay.`;
+      alert(msg);
+    });
+
+    document.getElementById('y').textContent = new Date().getFullYear();
+  </script>
+  <script src="/components/include-components.js" defer></script>
 </body>
+
 </html>

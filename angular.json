@@ -21,7 +21,18 @@
             "assets": [
               {
                 "glob": "**/*",
-                "input": "public"
+                "input": "public",
+                "output": "/"
+              },
+              {
+                "glob": "login.html",
+                "input": "src/",
+                "output": "/"
+              },
+              {
+                "glob": "**/*",
+                "input": "src/components",
+                "output": "/components"
               }
             ],
             "styles": [
@@ -88,5 +99,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "6453d198-1bc8-4ba3-a96b-da53ff5b6226"
   }
 }

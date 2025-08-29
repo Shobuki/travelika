@@ -1,0 +1,97 @@
+<header class="fixed top-0 inset-x-0 h-16 z-30 flex items-center backdrop-blur bg-[rgba(4,27,24,0.40)] border-b border-white/50 text-white">
+  <div class="container mx-auto px-4 flex items-center justify-between">
+    <a href="/" class="flex items-center gap-2 font-bold">
+      <span class="w-2.5 h-2.5 rounded-full bg-accent shadow-[0_0_10px_theme(colors.accent)]"></span>
+      Travelika
+    </a>
+
+    <nav class="hidden md:flex items-center gap-6 text-sm opacity-90">
+      <a href="#destinasi" class="hover:opacity-100">Forests</a>
+      <a href="#cara" class="hover:opacity-100">How It Works</a>
+      <a href="#keunggulan" class="hover:opacity-100">Benefits</a>
+    </nav>
+
+    <!-- Area auth; diisi via JS sesuai status login -->
+    <div id="authArea">
+      <a id="loginLink" class="px-4 py-2 rounded-full border border-white/40 text-white hover:bg-white/10" href="/login.html">
+        Sign In / Register
+      </a>
+    </div>
+  </div>
+</header>
+
+<script>
+(() => {
+  // --- helpers ---
+  const readCookie = (name) => {
+    const v = document.cookie.split("; ").find(r => r.startsWith(name + "="));
+    return v ? decodeURIComponent(v.split("=")[1]) : "";
+  };
+  const getSession = () => {
+    try { const raw = readCookie("travelika_session"); return raw ? JSON.parse(raw) : null; }
+    catch { return null; }
+  };
+  const initials = (str) => {
+    const s = (str || "").trim();
+    if (!s) return "?";
+    const parts = s.split(/\s+/);
+    const a = (parts[0]?.[0] || "").toUpperCase();
+    const b = (parts[1]?.[0] || "").toUpperCase();
+    return (a + b) || a || "?";
+  };
+
+  const auth = document.getElementById("authArea");
+  const ses = getSession();
+
+  // selalu set URL login agar ada ?next=
+  const next = encodeURIComponent(location.pathname + location.search + location.hash);
+  const loginUrl = `/login.html?next=${next}`;
+
+  if (!ses) {
+    const link = document.getElementById("loginLink");
+    if (link) link.href = loginUrl;
+    return; // belum login: selesai
+  }
+
+  // --- render state user ---
+  const name = ses.name || ses.email;
+  const ini  = initials(name);
+
+  auth.innerHTML = `
+    <div class="relative" id="userWrap">
+      <button id="userBtn" class="flex items-center gap-2 px-2 py-1 rounded-full bg-white/10 hover:bg-white/20">
+        <span class="w-7 h-7 rounded-full bg-accent text-blend grid place-items-center text-xs font-extrabold">
+          ${ini}
+        </span>
+        <span class="hidden sm:inline max-w-[10rem] truncate">${name}</span>
+        <svg class="opacity-80" width="16" height="16" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path d="M5.25 7.5L10 12.25L14.75 7.5H5.25Z"></path>
+        </svg>
+      </button>
+
+      <div id="userMenu" class="absolute right-0 mt-2 w-44 rounded-xl bg-white text-slate-700 shadow-lg border border-slate-200 hidden">
+        <a href="/" class="block px-3 py-2 rounded-t-xl hover:bg-slate-50">Beranda</a>
+        <a href="#pesan" class="block px-3 py-2 hover:bg-slate-50">Pesan Pass</a>
+        <button id="logoutBtn" class="w-full text-left px-3 py-2 rounded-b-xl hover:bg-slate-50 text-red-600">Keluar</button>
+      </div>
+    </div>
+  `;
+
+  // --- interaksi dropdown & logout ---
+  const btn  = document.getElementById("userBtn");
+  const menu = document.getElementById("userMenu");
+  const out  = document.getElementById("logoutBtn");
+
+  btn?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    menu?.classList.toggle("hidden");
+  });
+  document.addEventListener("click", () => menu?.classList.add("hidden"));
+
+  out?.addEventListener("click", () => {
+    // hapus cookie sesi
+    document.cookie = "travelika_session=; Max-Age=0; path=/; SameSite=Lax" + (location.protocol === "https:" ? "; Secure" : "");
+    location.reload();
+  });
+})();
+</script>
