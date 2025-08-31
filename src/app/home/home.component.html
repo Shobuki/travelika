@@ -1,0 +1,770 @@
+
+<body class="min-h-screen bg-slate-50 text-slate-900">
+  <!-- Header (include) -->
+  <app-header></app-header>
+
+  <main>
+    <!-- HERO -->
+    <section class="relative min-h-screen grid place-items-center text-white text-center"
+      style="background-image:url('./section1.jpg'); background-size:cover; background-position:center;">
+      <div class="absolute inset-0 bg-gradient-to-b from-transparent via-[rgba(4,27,24,0.65)] to-blend"></div>
+      <div class="relative container mx-auto px-4 pt-32 pb-20">
+        <h1 class="text-4xl md:text-5xl font-semibold leading-tight mb-3">Visit the World’s Forests<br class="hidden sm:block" />with One Pass</h1>
+        <p class="opacity-90 text-base md:text-lg max-w-2xl mx-auto">Travelika arranges <strong>permits & park entry tickets</strong>, <strong>transport</strong>, and <strong>lodging</strong>—you just choose the forest, dates, and guest count.</p>
+        <div class="mt-6 flex flex-wrap gap-3 justify-center">
+          <a class="px-5 py-3 rounded-xl font-bold bg-accent text-blend hover:brightness-110" href="#pesan">Check Availability</a>
+          <a class="px-5 py-3 rounded-xl font-bold border border-white/40 text-white bg-white/10 hover:bg-white/20" href="#cara">See How It Works</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- BOOKING -->
+    <section id="pesan" class="bg-blend text-teal-50 py-12 md:py-16">
+      <div class="container mx-auto px-4 grid gap-6 md:grid-cols-[1.15fr_.85fr] items-center">
+        <div class="space-y-3">
+          <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm bg-white/10 border border-white/25">🌲 Visit Pass • Permits handled</span>
+          <h2 class="text-2xl font-semibold">Book a Visit Pass</h2>
+          <p class="text-teal-100/80">Choose your forest, dates, pickup point, and package. We’ll arrange transport & lodging to match.</p>
+          <ul class="text-teal-100/80 text-sm list-disc ml-5">
+            <li>Prices are simulated—final at checkout.</li>
+            <li>Some locations require passports & specific vaccinations.</li>
+          </ul>
+        </div>
+
+        <form class="grid grid-cols-12 gap-4 bg-white/10 border border-white/30 rounded-2xl p-5 shadow-brand" id="bookingForm">
+          <!-- Forest -->
+          <div class="col-span-12 md:col-span-6 flex flex-col gap-2">
+            <label for="forest" class="text-sm opacity-90">Select Forest</label>
+            <select id="forest" required class="w-full rounded-lg px-3 py-3 bg-black/30 border border-white/40 text-teal-50 focus:outline-none focus:ring-2 focus:ring-accent">
+              <option value="AMAZON" data-base="900000">Amazon, Brazil</option>
+              <option value="BORNEO" data-base="700000">Kalimantan (Borneo), Indonesia</option>
+              <option value="BLACK_FOREST" data-base="650000">Black Forest, Germany</option>
+              <option value="TONGASS" data-base="800000">Tongass, Alaska</option>
+              <option value="AOKIGAHARA" data-base="600000">Aokigahara, Japan</option>
+              <option value="DAINTREE" data-base="680000">Daintree, Australia</option>
+              <option value="OLYMPIC" data-base="720000">Olympic, USA</option>
+            </select>
+          </div>
+          <!-- Pickup -->
+          <div class="col-span-12 md:col-span-6 flex flex-col gap-2">
+            <label for="pickup" class="text-sm opacity-90">Pickup Point (City/Airport)</label>
+            <select id="pickup" required class="w-full rounded-lg px-3 py-3 bg-black/30 border border-white/40 text-teal-50 focus:outline-none focus:ring-2 focus:ring-accent">
+              <option value="CGK">Jakarta (CGK)</option>
+              <option value="SIN">Singapore (SIN)</option>
+              <option value="MAO">Manaus (MAO)</option>
+              <option value="MUC">Munich (MUC)</option>
+              <option value="NRT">Tokyo (NRT)</option>
+            </select>
+          </div>
+
+          <!-- Dates -->
+          <div class="col-span-12 md:col-span-6 flex flex-col gap-2">
+            <label for="dateIn" class="text-sm opacity-90">Arrival Date</label>
+            <input id="dateIn" type="date" required class="w-full rounded-lg px-3 py-3 bg-black/30 border border-white/40 text-teal-50 placeholder-teal-200/60 focus:outline-none focus:ring-2 focus:ring-accent" />
+          </div>
+          <div class="col-span-12 md:col-span-6 flex flex-col gap-2">
+            <label for="dateOut" class="text-sm opacity-90">Departure Date</label>
+            <input id="dateOut" type="date" class="w-full rounded-lg px-3 py-3 bg-black/30 border border-white/40 text-teal-50 placeholder-teal-200/60 focus:outline-none focus:ring-2 focus:ring-accent" />
+          </div>
+
+          <!-- Guests & Package -->
+          <div class="col-span-12 md:col-span-6 flex flex-col gap-2">
+            <label for="guests" class="text-sm opacity-90">Guests</label>
+            <input id="guests" type="number" min="1" value="1" required class="w-full rounded-lg px-3 py-3 bg-black/30 border border-white/40 text-teal-50 focus:outline-none focus:ring-2 focus:ring-accent" />
+          </div>
+          <div class="col-span-12 md:col-span-6 flex flex-col gap-2">
+            <label for="pkg" class="text-sm opacity-90">Package</label>
+            <select id="pkg" class="w-full rounded-lg px-3 py-3 bg-black/30 border border-white/40 text-teal-50 focus:outline-none focus:ring-2 focus:ring-accent">
+              <option value="base" data-multiplier="1">Base</option>
+              <option value="explorer" data-multiplier="1.4">Explorer</option>
+              <option value="expedition" data-multiplier="1.9">Expedition</option>
+            </select>
+          </div>
+
+          <!-- Add-ons -->
+          <div class="col-span-12 grid grid-cols-1 md:grid-cols-3 gap-3">
+            <label class="inline-flex items-center gap-2 text-sm"><input id="needTransport" type="checkbox" class="accent-accent" checked /> Include Transport</label>
+            <label class="inline-flex items-center gap-2 text-sm"><input id="needLodging" type="checkbox" class="accent-accent" checked /> Include Lodging</label>
+            <label class="inline-flex items-center gap-2 text-sm"><input id="dayTrip" type="checkbox" class="accent-accent" /> Day Trip (no stay)</label>
+          </div>
+
+          <div class="col-span-12 flex justify-end gap-2">
+            <button type="reset" class="px-4 py-3 rounded-lg font-bold border border-white/40 text-white bg-white/10 hover:bg-white/20">Reset</button>
+            <button type="submit" class="px-4 py-3 rounded-lg font-bold bg-accent text-blend hover:brightness-110">Check & Save</button>
+          </div>
+        </form>
+        
+      </div>
+    </section>
+
+    <!-- FEATURED DESTINATIONS (dipersingkat) -->
+    <section id="destinasi" class="py-16 bg-white">
+      <div class="container mx-auto px-4">
+        <div class="flex items-end justify-between flex-wrap gap-3 mb-6">
+          <h2 class="text-2xl font-semibold">Featured Forest Destinations</h2>
+          <a href="#pesan" class="text-sm px-3 py-2 rounded-lg bg-accent text-blend font-semibold hover:brightness-110">Check Availability</a>
+        </div>
+        <p class="text-slate-600 mb-6 max-w-3xl">Iconic forests around the world you can visit with a Travelika Pass. Images and prices are illustrative.</p>
+        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div class="bg-white rounded-xl overflow-hidden border border-slate-200 shadow">
+            <img src="images/forests/amazon.jpg" alt="Amazon Rainforest, Brazil" loading="lazy" class="w-full h-52 object-cover">
+            <div class="p-4">
+              <div class="flex items-center justify-between">
+                <h3 class="font-semibold">Amazon, Brazil</h3>
+                <span class="text-xs px-2 py-1 rounded bg-emerald-50 text-emerald-700">From ~ IDR 900k</span>
+              </div>
+              <p class="text-slate-600 mt-1">Vast river systems, dense canopy, and the planet’s richest biodiversity.</p>
+            </div>
+          </div>
+          <!-- 5 kartu lain sama seperti sebelumnya -->
+          <div class="bg-white rounded-xl overflow-hidden border border-slate-200 shadow">
+            <img src="images/forests/borneo.jpg" alt="Borneo Rainforest, Indonesia" loading="lazy" class="w-full h-52 object-cover">
+            <div class="p-4">
+              <div class="flex items-center justify-between">
+                <h3 class="font-semibold">Borneo, Indonesia</h3>
+                <span class="text-xs px-2 py-1 rounded bg-emerald-50 text-emerald-700">From ~ IDR 700k</span>
+              </div>
+              <p class="text-slate-600 mt-1">Home of orangutans, peat swamps, and enchanting river routes.</p>
+            </div>
+          </div>
+          <div class="bg-white rounded-xl overflow-hidden border border-slate-200 shadow">
+            <img src="images/forests/black-forest.jpg" alt="Black Forest, Germany" loading="lazy" class="w-full h-52 object-cover">
+            <div class="p-4">
+              <div class="flex items-center justify-between">
+                <h3 class="font-semibold">Black Forest, Germany</h3>
+                <span class="text-xs px-2 py-1 rounded bg-emerald-50 text-emerald-700">From ~ IDR 650k</span>
+              </div>
+              <p class="text-slate-600 mt-1">Misty pines, timber villages, and classic hiking trails.</p>
+            </div>
+          </div>
+          <div class="bg-white rounded-xl overflow-hidden border border-slate-200 shadow">
+            <img src="images/forests/tongass.jpg" alt="Tongass National Forest, Alaska" loading="lazy" class="w-full h-52 object-cover">
+            <div class="p-4">
+              <div class="flex items-center justify-between">
+                <h3 class="font-semibold">Tongass, Alaska</h3>
+                <span class="text-xs px-2 py-1 rounded bg-emerald-50 text-emerald-700">From ~ IDR 800k</span>
+              </div>
+              <p class="text-slate-600 mt-1">Temperate rainforest, glaciers, and iconic North American wildlife.</p>
+            </div>
+          </div>
+          <div class="bg-white rounded-xl overflow-hidden border border-slate-200 shadow">
+            <img src="images/forests/daintree.jpg" alt="Daintree Rainforest, Australia" loading="lazy" class="w-full h-52 object-cover">
+            <div class="p-4">
+              <div class="flex items-center justify-between">
+                <h3 class="font-semibold">Daintree, Australia</h3>
+                <span class="text-xs px-2 py-1 rounded bg-emerald-50 text-emerald-700">From ~ IDR 680k</span>
+              </div>
+              <p class="text-slate-600 mt-1">Ancient coastal rainforest near the Great Barrier Reef—unique and photogenic.</p>
+            </div>
+          </div>
+          <div class="bg-white rounded-xl overflow-hidden border border-slate-200 shadow">
+            <img src="images/forests/olympic.jpg" alt="Olympic National Park, United States" loading="lazy" class="w-full h-52 object-cover">
+            <div class="p-4">
+              <div class="flex items-center justify-between">
+                <h3 class="font-semibold">Olympic, USA</h3>
+                <span class="text-xs px-2 py-1 rounded bg-emerald-50 text-emerald-700">From ~ IDR 720k</span>
+              </div>
+              <p class="text-slate-600 mt-1">Lush moss, wild beaches, and mountains in a single park.</p>
+            </div>
+          </div>
+        </div>
+        <div class="mt-6 flex justify-center">
+          <a href="#pesan" class="px-5 py-3 rounded-xl font-bold bg-accent text-blend hover:brightness-110">Book a Pass for These Destinations</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- PACKAGES -->
+    <section id="packages" class="py-16 bg-slate-50">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-10">
+          <h2 class="text-2xl font-semibold">Choose Your Package</h2>
+          <p class="text-slate-600 max-w-3xl mx-auto mt-2">
+            Pick a tier that fits your style. Multipliers apply to the base forest pass price:
+            <span class="inline-flex gap-2 ml-1 align-middle text-xs">
+              <span class="px-2 py-0.5 rounded-full bg-slate-200 text-slate-700">Base ×1.0</span>
+              <span class="px-2 py-0.5 rounded-full bg-slate-200 text-slate-700">Explorer ×1.4</span>
+              <span class="px-2 py-0.5 rounded-full bg-slate-200 text-slate-700">Expedition ×1.9</span>
+            </span>
+          </p>
+        </div>
+
+        <div class="grid gap-6 md:grid-cols-3">
+          <!-- Base -->
+          <div class="bg-white rounded-2xl border border-slate-200 shadow p-6 flex flex-col">
+            <div class="mb-4">
+              <h3 class="text-lg font-semibold">Base</h3>
+              <p class="text-slate-600 text-sm">Essentials for a smooth first-time visit.</p>
+            </div>
+            <ul class="text-sm text-slate-700 space-y-2 flex-1">
+              <li class="flex items-start gap-2"><span>✔</span><span>Park entry & permit handling</span></li>
+              <li class="flex items-start gap-2"><span>✔</span><span>Shared ranger (group tour)</span></li>
+              <li class="flex items-start gap-2"><span>✔</span><span>Standard transport (shared)</span></li>
+              <li class="flex items-start gap-2"><span>✔</span><span>Lodge/camp (standard)</span></li>
+              <li class="flex items-start gap-2"><span>✔</span><span>Chat support (09:00–21:00)</span></li>
+              <li class="flex items-start gap-2"><span>✔</span><span>Gear checklist & safety brief</span></li>
+            </ul>
+          </div>
+
+          <!-- Explorer -->
+          <div class="bg-white rounded-2xl border border-accent/40 shadow p-6 ring-1 ring-accent/30 relative flex flex-col">
+            <span class="absolute -top-3 right-4 text-[10px] uppercase tracking-wide px-2 py-1 rounded-full bg-accent text-blend font-extrabold shadow">Most Popular</span>
+            <div class="mb-4">
+              <h3 class="text-lg font-semibold">Explorer</h3>
+              <p class="text-slate-600 text-sm">More comfort and flexibility for explorers.</p>
+            </div>
+            <ul class="text-sm text-slate-700 space-y-2 flex-1">
+              <li class="flex items-start gap-2"><span>✔</span><span>Everything in <b>Base</b></span></li>
+              <li class="flex items-start gap-2"><span>✔</span><span>Small group (max 8)</span></li>
+              <li class="flex items-start gap-2"><span>✔</span><span>Airport pickup & all transfers</span></li>
+              <li class="flex items-start gap-2"><span>✔</span><span>1 custom activity (e.g., night walk)</span></li>
+              <li class="flex items-start gap-2"><span>✔</span><span>Lodge/camp (mid-range, breakfast)</span></li>
+              <li class="flex items-start gap-2"><span>✔</span><span>24/7 messenger support</span></li>
+              <li class="flex items-start gap-2"><span>✔</span><span>Basic travel insurance</span></li>
+            </ul>
+          </div>
+
+          <!-- Expedition -->
+          <div class="bg-white rounded-2xl border border-slate-200 shadow p-6 flex flex-col">
+            <div class="mb-4">
+              <h3 class="text-lg font-semibold">Expedition</h3>
+              <p class="text-slate-600 text-sm">Private, premium, and deeply immersive.</p>
+            </div>
+            <ul class="text-sm text-slate-700 space-y-2 flex-1">
+              <li class="flex items-start gap-2"><span>✔</span><span>Everything in <b>Explorer</b></span></li>
+              <li class="flex items-start gap-2"><span>✔</span><span>Private licensed ranger & private vehicle</span></li>
+              <li class="flex items-start gap-2"><span>✔</span><span>Premium ecolodge / upgraded camp</span></li>
+              <li class="flex items-start gap-2"><span>✔</span><span>2 custom activities (sunrise/sunset session, canoeing, etc.)</span></li>
+              <li class="flex items-start gap-2"><span>✔</span><span>Expanded permits where required</span></li>
+              <li class="flex items-start gap-2"><span>✔</span><span>Satellite communicator for emergencies</span></li>
+              <li class="flex items-start gap-2"><span>✔</span><span>Premium travel insurance</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <p class="text-xs text-slate-500 mt-4 text-center">Final pricing varies by forest, season, and availability. Expedition slots can be limited in protected zones.</p>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section id="ayo" class="relative min-h-[50vh] md:min-h-[60vh] grid place-items-center text-white text-center"
+      style="background-image:url('https://c.pxhere.com/photos/12/43/bird%27s_eye_view_cold_daylight_environment_fog_foggy_landscape_nature-1560621.jpg!d'); background-size:cover; background-position:top;">
+      <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-transparent"></div>
+      <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.55)_0%,rgba(0,0,0,0.35)_40%,transparent_70%)] mix-blend-multiply"></div>
+      <div class="relative container mx-auto px-4 py-16">
+        <h2 class="text-4xl md:text-5xl font-extrabold tracking-tight drop-shadow-[0_3px_10px_rgba(0,0,0,0.75)]">What are you waiting for?</h2>
+        <p class="mt-3 max-w-2xl mx-auto text-white/95 drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]">Get your Travelika Pass to visit forests around the world. Permits, transport, and lodging—all arranged.</p>
+        <div class="mt-5 flex gap-3 justify-center flex-wrap">
+          <a href="#pesan" class="px-5 py-3 rounded-xl font-bold bg-accent text-blend hover:brightness-110 shadow-md">Book Now</a>
+          <a href="#destinasi" class="px-5 py-3 rounded-xl font-bold border border-white/50 text-white/95 bg-white/15 hover:bg-white/25 shadow-md">See Destinations</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="relative min-h-[70vh] grid place-items-end text-white text-center"
+      style="background-image:url('https://c.pxhere.com/photos/12/43/bird%27s_eye_view_cold_daylight_environment_fog_foggy_landscape_nature-1560621.jpg!d'); background-size:cover; background-position:center;">
+      <div class="absolute inset-0 bg-gradient-to-b from-transparent via-black/10 to-blend"></div>
+      <div class="relative container mx-auto px-4 py-12">
+        <a href="#pesan" class="inline-block px-5 py-3 rounded-xl font-bold bg-accent text-blend hover:brightness-110">Start Booking</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <div data-include="/components/footer.html"></div>
+
+  <!-- ===== Modal: Require Sign In ===== -->
+  <div id="authModal" class="fixed inset-0 z-50 hidden" aria-modal="true" role="dialog">
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" data-close-auth></div>
+    <div class="relative mx-auto max-w-lg mt-24 bg-white rounded-2xl p-6 shadow-xl border border-slate-200">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <h3 class="text-lg font-bold text-slate-900">Sign in required</h3>
+          <p class="text-slate-600 text-sm mt-1">You need to sign in to save and purchase a Travelika Pass.</p>
+        </div>
+        <button class="text-slate-400 hover:text-slate-600" aria-label="Close" data-close-auth>✕</button>
+      </div>
+      <div class="mt-4 rounded-lg bg-slate-50 border border-slate-200 p-3">
+        <div class="text-xs font-semibold text-slate-700 mb-1">Your selection</div>
+        <pre id="authModalSummary" class="text-xs text-slate-700 whitespace-pre-wrap"></pre>
+      </div>
+      <div class="mt-5 flex justify-end gap-2">
+        <button class="px-4 py-2 rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50" data-close-auth>Cancel</button>
+        <a id="authGoLogin" class="px-4 py-2 rounded-lg bg-accent text-blend font-bold hover:brightness-110">Sign In / Register</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Modal: Confirmation ===== -->
+  <div id="confirmModal" class="fixed inset-0 z-50 hidden" aria-modal="true" role="dialog">
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" data-close-confirm></div>
+    <div class="relative mx-auto max-w-lg mt-24 bg-white rounded-2xl p-6 shadow-xl border border-slate-200">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <h3 class="text-lg font-bold text-slate-900">Confirm your booking</h3>
+          <p class="text-slate-600 text-sm mt-1">Review details below before checkout.</p>
+        </div>
+        <button class="text-slate-400 hover:text-slate-600" aria-label="Close" data-close-confirm>✕</button>
+      </div>
+      <div class="mt-4 rounded-lg bg-slate-50 border border-slate-200 p-3">
+        <div class="text-xs font-semibold text-slate-700 mb-1">Summary</div>
+        <pre id="confirmModalSummary" class="text-xs text-slate-700 whitespace-pre-wrap"></pre>
+      </div>
+      <div class="mt-5 flex items-center justify-between">
+        <div class="text-sm text-slate-700">
+          <span class="font-semibold">Total:</span>
+          <span id="confirmModalTotal" class="font-bold"></span>
+        </div>
+        <div class="flex gap-2">
+          <button class="px-4 py-2 rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50" data-close-confirm>Back</button>
+          <button id="confirmSavePending" class="px-4 py-2 rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50">Pay Later</button>
+          <button id="confirmGoCheckout" class="px-4 py-2 rounded-lg bg-accent text-blend font-bold hover:brightness-110">Pay Now</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Modal: Payment ===== -->
+  <div id="paymentModal" class="fixed inset-0 z-50 hidden" aria-modal="true" role="dialog">
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" data-close-payment></div>
+    <div class="relative mx-auto max-w-lg mt-24 bg-white rounded-2xl p-6 shadow-xl border border-slate-200">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <h3 class="text-lg font-bold text-slate-900">Payment</h3>
+          <p class="text-slate-600 text-sm mt-1">Complete your payment to confirm.</p>
+        </div>
+        <button class="text-slate-400 hover:text-slate-600" aria-label="Close" data-close-payment>✕</button>
+      </div>
+      <div class="mt-4 rounded-lg bg-slate-50 border border-slate-200 p-3">
+        <div class="text-xs font-semibold text-slate-700 mb-1">Summary</div>
+        <pre id="paymentModalSummary" class="text-xs text-slate-700 whitespace-pre-wrap"></pre>
+      </div>
+
+      <!-- Payment methods -->
+      <div class="mt-4">
+        <div class="text-xs font-semibold text-slate-700 mb-2">Choose Payment Method</div>
+        <div class="grid sm:grid-cols-2 gap-2">
+          <!-- Card -->
+          <label class="pay-option selected flex items-center gap-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer">
+            <input type="radio" name="payMethod" value="CARD" class="sr-only" checked>
+            <span class="inline-flex items-center gap-2">
+              <!-- Simple Visa/Mastercard graphic -->
+              <span class="inline-flex items-center -space-x-2">
+                <span class="w-6 h-4 rounded bg-[#1a1f71]"></span>
+                <span class="w-6 h-4 rounded bg-[#eb001b]"></span>
+              </span>
+              <span class="text-sm text-slate-800">Credit/Debit Card</span>
+            </span>
+          </label>
+          <!-- PayPal -->
+          <label class="pay-option flex items-center gap-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer">
+            <input type="radio" name="payMethod" value="PAYPAL" class="sr-only">
+            <span class="inline-flex items-center gap-2">
+              <span class="w-6 h-4 rounded bg-[#003087]"></span>
+              <span class="text-sm text-slate-800">PayPal</span>
+            </span>
+          </label>
+          <!-- Bank Transfer -->
+          <label class="pay-option flex items-center gap-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer">
+            <input type="radio" name="payMethod" value="BANK" class="sr-only">
+            <span class="inline-flex items-center gap-2">
+              <span class="w-6 h-4 rounded bg-slate-700 grid place-items-center text-[10px] text-white">VA</span>
+              <span class="text-sm text-slate-800">Bank Transfer / VA</span>
+            </span>
+          </label>
+          <!-- E-Wallet -->
+          <label class="pay-option flex items-center gap-3 p-3 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer">
+            <input type="radio" name="payMethod" value="EWALLET" class="sr-only">
+            <span class="inline-flex items-center gap-2">
+              <span class="w-6 h-4 rounded bg-[#00AAE4]"></span>
+              <span class="text-sm text-slate-800">E‑Wallet</span>
+            </span>
+          </label>
+        </div>
+      </div>
+      <div class="mt-5 flex items-center justify-between">
+        <div class="text-sm text-slate-700">
+          <span class="font-semibold">Total:</span>
+          <span id="paymentModalTotal" class="font-bold"></span>
+        </div>
+        <div class="flex gap-2">
+          <button class="px-4 py-2 rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50" data-close-payment>Back</button>
+          <button id="paymentDoPay" class="px-4 py-2 rounded-lg bg-emerald-600 text-white font-bold hover:brightness-110">Pay Now</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Modal: Checkout Success ===== -->
+  <div id="successModal" class="fixed inset-0 z-50 hidden" aria-modal="true" role="dialog">
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" data-close-success></div>
+    <div class="relative mx-auto max-w-lg mt-24 bg-white rounded-2xl p-6 shadow-xl border border-slate-200">
+      <div class="flex items-start justify-between gap-4">
+        <div class="flex items-center gap-2">
+          <div class="w-9 h-9 rounded-full bg-emerald-100 grid place-items-center">✅</div>
+          <div>
+            <h3 class="text-lg font-bold text-slate-900">Checkout Success</h3>
+            <p class="text-slate-600 text-sm mt-0.5">Your Travelika Pass is confirmed.</p>
+          </div>
+        </div>
+        <button class="text-slate-400 hover:text-slate-600" aria-label="Close" data-close-success>✕</button>
+      </div>
+      <div class="mt-4 rounded-lg bg-slate-50 border border-slate-200 p-3">
+        <pre id="successModalBody" class="text-xs text-slate-700 whitespace-pre-wrap"></pre>
+      </div>
+      <div class="mt-5 flex justify-end gap-2">
+        <a href="/mybookings" class="px-4 py-2 rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50">My Bookings</a>
+        <button class="px-4 py-2 rounded-lg bg-accent text-blend font-bold hover:brightness-110" data-close-success>Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Modal: Pricing Details (pre-checkout) ===== -->
+  <div id="pricingModal" class="fixed inset-0 z-50 hidden" aria-modal="true" role="dialog">
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" data-close-pricing></div>
+    <div class="relative mx-auto max-w-2xl w-[calc(100%-2rem)] mt-10 md:mt-16 bg-white rounded-2xl p-6 shadow-xl border border-slate-200 max-h-[85vh] overflow-y-auto">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <h3 class="text-xl font-bold text-slate-900">Price Details</h3>
+          <p class="text-slate-600 text-base mt-1">Full breakdown of your ticket and extras.</p>
+        </div>
+        <button class="text-slate-400 hover:text-slate-600" aria-label="Close" data-close-pricing>✕</button>
+      </div>
+
+      <div class="mt-4 grid md:grid-cols-2 gap-4">
+        <div class="rounded-lg bg-slate-50 border border-slate-200 p-3">
+          <div class="text-sm font-semibold text-slate-700 mb-1">Selection</div>
+          <pre id="pricingModalSummary" class="text-sm text-slate-700 whitespace-pre-wrap"></pre>
+        </div>
+        <div class="rounded-lg bg-slate-50 border border-slate-200 p-3">
+          <div class="text-sm font-semibold text-slate-700 mb-1">Breakdown</div>
+          <div id="pricingModalBreakdown" class="text-sm text-slate-700"></div>
+        </div>
+      </div>
+
+      <div class="mt-4">
+        <div class="text-sm font-semibold text-slate-700 mb-2">Choose Destination</div>
+        <div id="pricingDestinations" class="grid sm:grid-cols-2 gap-2 text-sm text-slate-700"></div>
+      </div>
+
+      <div class="mt-4 flex items-center justify-between">
+        <div class="text-base text-slate-700">
+          <span class="font-semibold">Total:</span>
+          <span id="pricingModalTotal" class="font-bold"></span>
+        </div>
+        <div class="flex gap-2">
+          <button id="pricingBack" class="px-4 py-2 rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50" data-close-pricing>Back</button>
+          <button id="pricingContinue" class="px-4 py-2 rounded-lg bg-accent text-blend font-bold hover:brightness-110">Continue</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======= APP SCRIPT ======= -->
+  <script>
+    // ---------- Dexie / IndexedDB ----------
+    const db = new Dexie('travelika');
+    db.version(1).stores({ users: 'email, name, passHash, createdAt' });
+    db.version(2).stores({
+      users: 'email, name, passHash, createdAt',
+      bookings: '++id, code, email, createdAt, forest, dateIn, dateOut, pkg'
+    });
+
+    // Request persistent storage (optional)
+    (async () => {
+      if (navigator.storage?.persist) {
+        const persisted = await navigator.storage.persisted();
+        if (!persisted) await navigator.storage.persist();
+      }
+    })();
+
+    // ---------- Session & helpers ----------
+    function getSession(){
+      const raw = (document.cookie.split('; ').find(r=>r.startsWith('travelika_session='))||'').split('=')[1];
+      if(!raw) return null;
+      try{ return JSON.parse(decodeURIComponent(raw)); }catch{ return null; }
+    }
+    function genBookingCode(){
+      const d = new Date();
+      const y = d.getFullYear().toString().slice(-2);
+      const m = String(d.getMonth()+1).padStart(2,'0');
+      const day = String(d.getDate()).padStart(2,'0');
+      const rand = Math.random().toString(36).slice(2,6).toUpperCase();
+      return `TIKA-${y}${m}${day}-${rand}`;
+    }
+    async function saveBookingToDB(payload){
+      const ses = getSession();
+      if (!ses) throw new Error('AUTH_REQUIRED');
+      const code = genBookingCode();
+      const rec = {
+        code,
+        email: ses.email,
+        name: ses.name || null,
+        createdAt: Date.now(),
+        status: 'pending',
+        ...payload
+      };
+      const id = await db.bookings.add(rec);
+      return { id, code, email: rec.email };
+    }
+    async function markBookingPaid(id){
+      await db.bookings.update(id, { status: 'paid', paidAt: Date.now() });
+    }
+
+    // ---------- Refs ----------
+    const forest = document.getElementById('forest');
+    const pickup = document.getElementById('pickup');
+    const dateIn = document.getElementById('dateIn');
+    const dateOut = document.getElementById('dateOut');
+    const guests = document.getElementById('guests');
+    const pkg = document.getElementById('pkg');
+    const needTransport = document.getElementById('needTransport');
+    const needLodging = document.getElementById('needLodging');
+    const dayTrip = document.getElementById('dayTrip');
+
+    // ---------- Cookies (prefill) ----------
+    const setCookie = (name, value, days = 7) => {
+      const d = new Date(); d.setTime(d.getTime() + days * 24 * 60 * 60 * 1000);
+      let cookie = `${name}=${encodeURIComponent(value)};expires=${d.toUTCString()};path=/;SameSite=Lax`;
+      if (location.protocol === 'https:') cookie += ';Secure';
+      document.cookie = cookie;
+    };
+    const getCookie = (name) => {
+      const v = document.cookie.split('; ').find(r => r.startsWith(name + '='));
+      return v ? decodeURIComponent(v.split('=')[1]) : '';
+    };
+
+    // Prefill form dari cookie
+    try {
+      const saved = getCookie('travelika_visit');
+      if (saved) {
+        const d = JSON.parse(saved);
+        forest.value = d.forest || forest.value;
+        pickup.value = d.pickup || pickup.value;
+        dateIn.value = d.dateIn || '';
+        dateOut.value = d.dateOut || '';
+        guests.value = d.guests || 1;
+        pkg.value = d.pkg || 'base';
+        needTransport.checked = d.needTransport ?? true;
+        needLodging.checked = d.needLodging ?? true;
+        dayTrip.checked = d.dayTrip ?? false;
+      }
+    } catch {}
+
+    // ---------- Dates guard ----------
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const dd = String(today.getDate()).padStart(2, '0');
+    const minDate = `${yyyy}-${mm}-${dd}`;
+    dateIn.min = minDate; dateOut.min = minDate;
+
+    dayTrip.addEventListener('change', (e) => {
+      dateOut.disabled = e.target.checked;
+      if (e.target.checked) dateOut.value = '';
+    });
+    dateIn.addEventListener('change', () => {
+      dateOut.min = dateIn.value || minDate;
+      if (dateOut.value && dateOut.value < dateOut.min) dateOut.value = '';
+    });
+
+    // ---------- Utils ----------
+    function diffDays(a, b) {
+      const A = new Date(a), B = new Date(b);
+      const ms = (B - A) / (1000 * 60 * 60 * 24);
+      return Math.max(1, Math.round(ms));
+    }
+    const fmtIDR = n => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(n);
+
+    function collectPayloadAndSubtotal(){
+      const base = Number(forest.options[forest.selectedIndex].dataset.base || 0); // base / person / day
+      const pax  = Math.max(1, Number(guests.value || 1));
+      const mult = Number(pkg.options[pkg.selectedIndex].dataset.multiplier || 1);
+      const days = dayTrip.checked ? 1 : diffDays(dateIn.value, dateOut.value || dateIn.value);
+      const nights = Math.max(0, days - 1);
+
+      const transportPerPerson = 350000;
+      const lodgingPerNightPerPerson = 450000;
+
+      const passCost      = base * pax * days * mult;
+      const transportCost = needTransport.checked ? (transportPerPerson * pax) : 0;
+      const lodgingCost   = (needLodging.checked && nights > 0) ? (lodgingPerNightPerPerson * pax * nights) : 0;
+      const subtotal      = passCost + transportCost + lodgingCost;
+
+      const payload = {
+        forest: forest.value,
+        pickup: pickup.value,
+        dateIn: dateIn.value,
+        dateOut: dayTrip.checked ? '' : dateOut.value,
+        dayTrip: dayTrip.checked,
+        guests: pax,
+        pkg: pkg.value,
+        needTransport: needTransport.checked,
+        needLodging: needLodging.checked,
+      };
+      return { payload, subtotal, days, nights, pax, mult };
+    }
+
+    function makeSummary(payload, subtotal, forestLabel, pax){
+      return `Forest   : ${forestLabel}
+Pickup   : ${payload.pickup}
+Dates    : ${payload.dateIn}${payload.dayTrip ? ' (day trip)' : ' — ' + (payload.dateOut || '-')}
+Guests   : ${pax} | Package: ${payload.pkg}
+Transport: ${payload.needTransport ? 'Yes' : 'No'} | Lodging: ${payload.needLodging ? 'Yes' : 'No'}
+
+Estimated cost: ${fmtIDR(subtotal)}`;
+    }
+
+    // ---------- Modal helpers ----------
+    // Auth
+    const authModal = document.getElementById('authModal');
+    const authSummary = document.getElementById('authModalSummary');
+    const authGoLogin = document.getElementById('authGoLogin');
+    function openAuthModal(summaryText){
+      authSummary.textContent = summaryText;
+      authModal.classList.remove('hidden');
+      document.body.classList.add('overflow-hidden');
+    }
+    function closeAuthModal(){
+      authModal.classList.add('hidden');
+      document.body.classList.remove('overflow-hidden');
+    }
+    authModal.addEventListener('click', (e)=>{
+      if (e.target.matches('[data-close-auth]')) closeAuthModal();
+    });
+
+    // Confirm
+    const confirmModal = document.getElementById('confirmModal');
+    const confirmSummary = document.getElementById('confirmModalSummary');
+    const confirmTotal = document.getElementById('confirmModalTotal');
+    const confirmGoCheckout = document.getElementById('confirmGoCheckout');
+    function openConfirmModal(summaryText, totalText){
+      confirmSummary.textContent = summaryText;
+      confirmTotal.textContent = totalText;
+      confirmModal.classList.remove('hidden');
+      document.body.classList.add('overflow-hidden');
+    }
+    function closeConfirmModal(){
+      confirmModal.classList.add('hidden');
+      document.body.classList.remove('overflow-hidden');
+    }
+    confirmModal.addEventListener('click', (e)=>{
+      if (e.target.matches('[data-close-confirm]')) closeConfirmModal();
+    });
+
+    // Success
+    const successModal = document.getElementById('successModal');
+    const successBody = document.getElementById('successModalBody');
+    function openSuccessModal(text){
+      successBody.textContent = text;
+      successModal.classList.remove('hidden');
+      document.body.classList.add('overflow-hidden');
+    }
+    function closeSuccessModal(){
+      successModal.classList.add('hidden');
+      document.body.classList.remove('overflow-hidden');
+    }
+    successModal.addEventListener('click', (e)=>{
+      if (e.target.matches('[data-close-success]')) closeSuccessModal();
+    });
+
+    // Escape to close top-most modal
+    document.addEventListener('keydown', (e)=>{
+      if (e.key === 'Escape') {
+        if (!successModal.classList.contains('hidden')) return closeSuccessModal();
+        if (!confirmModal.classList.contains('hidden')) return closeConfirmModal();
+        if (!authModal.classList.contains('hidden')) return closeAuthModal();
+      }
+    });
+
+    // ---------- Submit: Check & Save ----------
+    let pendingPayload = null; // disimpan sementara sampai user confirm
+    document.getElementById('bookingForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      // Validasi tanggal
+      if (!dateIn.value) { alert('Please select an arrival date.'); return; }
+      if (!dayTrip.checked && !dateOut.value) {
+        alert('Please select a departure date (or choose Day Trip).');
+        return;
+      }
+
+      const { payload, subtotal, pax } = collectPayloadAndSubtotal();
+      const forestLabel = forest.options[forest.selectedIndex].text;
+
+      // Simpan cookie (prefill) dulu
+      setCookie('travelika_visit', JSON.stringify({...payload, subtotal}), 7);
+
+      // Wajib login
+      const ses = getSession();
+      if (!ses) {
+        const summary = makeSummary(payload, subtotal, forestLabel, pax) + '\n\nSign in to continue.';
+        openAuthModal(summary);
+        authGoLogin.onclick = () => {
+          const next = location.pathname + '#pesan';
+          location.href = '/login.html?next=' + encodeURIComponent(next);
+        };
+        return;
+      }
+
+      // Sudah login -> tampilkan modal konfirmasi
+      pendingPayload = { ...payload, subtotal, forestLabel, pax, ses };
+      openConfirmModal(makeSummary(payload, subtotal, forestLabel, pax), fmtIDR(subtotal));
+    });
+
+    // ---------- Confirm & Checkout ----------
+    confirmGoCheckout.addEventListener('click', async () => {
+      if (!pendingPayload) return;
+      const btn = confirmGoCheckout;
+      const originalText = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Processing...';
+
+      try {
+        const { subtotal, ses, forestLabel, pax, ...payload } = pendingPayload;
+        const { id, code } = await saveBookingToDB({ ...payload, subtotal });
+
+        // Simulasikan checkout -> mark as paid
+        await markBookingPaid(id);
+
+        closeConfirmModal();
+
+        const successText =
+`Booking Code : ${code}
+Status       : Paid
+Under        : ${ses.email}
+
+Forest   : ${forestLabel}
+Pickup   : ${payload.pickup}
+Dates    : ${payload.dateIn}${payload.dayTrip ? ' (day trip)' : ' — ' + (payload.dateOut || '-')}
+Guests   : ${pax} | Package: ${payload.pkg}
+Transport: ${payload.needTransport ? 'Yes' : 'No'} | Lodging: ${payload.needLodging ? 'Yes' : 'No'}
+
+Total paid: ${fmtIDR(subtotal)}
+
+Your pass is saved in this browser (IndexedDB).
+You can see it in My Bookings.`;
+        openSuccessModal(successText);
+
+        // optionally clear cookie after success
+        setCookie('travelika_visit', '', -1);
+        pendingPayload = null;
+      } catch (err) {
+        console.error('Checkout failed:', err);
+        alert('Checkout failed. Please try again.');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = originalText;
+      }
+    });
+
+    // Footer year (jika footer punya #y)
+    const y = document.getElementById('y');
+    if (y) y.textContent = new Date().getFullYear();
+  </script>
+
+  <!-- include loader for header/footer -->
+  <script src="/components/include-components.js" defer></script>
+  <app-footer></app-footer>
+</body>
+

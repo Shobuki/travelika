@@ -1,0 +1,98 @@
+<section
+  class="relative min-h-screen text-white text-center mt-10"
+  style="background-image:url('./section1.jpg'); background-size:cover; background-position:center;"
+>
+  <div class="absolute inset-0 bg-gradient-to-b from-transparent via-[rgba(4,27,24,0.65)] to-blend"></div>
+
+  <div class="relative w-full">
+    <app-header></app-header>
+
+    <!-- Tidak center vertikal; tetap di atas dengan padding -->
+    <div class="container mx-auto px-4 pt-28 pb-14 flex justify-center">
+      <div class="mx-auto max-w-md bg-white/10 border border-white/30 rounded-2xl shadow-brand backdrop-blur p-6 md:p-7 text-left flex flex-col">
+
+        <!-- Heading -->
+        <div class="mb-3">
+          <div class="flex items-center justify-between gap-3 mb-2">
+            <h1 class="text-xl md:text-2xl font-semibold">Welcome to Travelika</h1>
+            <a href="/" class="text-xs md:text-sm text-white/90 hover:text-white underline underline-offset-4">Back to Home</a>
+          </div>
+          <p class="text-white/90 text-xs md:text-sm">
+            Sign in to save bookings and purchase your <b>Travelika Pass</b>. Your account is stored securely in this browser (IndexedDB).
+          </p>
+        </div>
+
+        <!-- Tabs: posisinya kini stabil karena kartu tidak di-center vertikal -->
+        <div class="grid grid-cols-2 rounded-xl overflow-hidden border border-white/30 bg-white/10 mb-4 shrink-0">
+          <button
+            class="py-2 text-sm font-semibold"
+            [class.bg-accent]="tab() === 'login'"
+            [class.text-blend]="tab() === 'login'"
+            (click)="switchTab('login')"
+          >Sign In</button>
+          <button
+            class="py-2 text-sm font-semibold"
+            [class.bg-accent]="tab() === 'register'"
+            [class.text-blend]="tab() === 'register'"
+            (click)="switchTab('register')"
+          >Register</button>
+        </div>
+
+        <!-- Alerts -->
+        <ng-container *ngIf="errorMsg || infoMsg">
+          <div class="mb-3 shrink-0">
+            <div *ngIf="errorMsg" class="px-3 py-2 rounded-lg bg-red-500/15 border border-red-400/40 text-red-100 text-xs mb-2">
+              {{ errorMsg }}
+            </div>
+            <div *ngIf="infoMsg" class="px-3 py-2 rounded-lg bg-amber-500/15 border border-amber-400/40 text-amber-100 text-xs">
+              {{ infoMsg }}
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- Isi form (boleh beda tinggi; atas tetap) -->
+        <div class="flex-1">
+          <!-- LOGIN -->
+          <form *ngIf="tab() === 'login'" (ngSubmit)="onLogin()" class="grid gap-2">
+            <label class="text-xs opacity-90">Email</label>
+            <input [(ngModel)]="loginEmail" name="loginEmail" type="email" required autocomplete="email"
+              class="w-full rounded-lg px-3 py-2.5 bg-black/30 border border-white/40 text-teal-50 placeholder-teal-200/60 focus:outline-none focus:ring-2 focus:ring-accent"
+              placeholder="you@example.com" />
+            <label class="text-xs opacity-90">Password</label>
+            <input [(ngModel)]="loginPass" name="loginPass" type="password" required autocomplete="current-password"
+              class="w-full rounded-lg px-3 py-2.5 bg-black/30 border border-white/40 text-teal-50 placeholder-teal-200/60 focus:outline-none focus:ring-2 focus:ring-accent"
+              placeholder="••••••••" />
+            <button type="submit" [disabled]="loading"
+              class="mt-2 px-4 py-2.5 rounded-lg font-bold text-sm bg-accent text-blend hover:brightness-110 disabled:opacity-70">
+              {{ loading ? 'Signing in…' : 'Sign In' }}
+            </button>
+          </form>
+
+          <!-- REGISTER -->
+          <form *ngIf="tab() === 'register'" (ngSubmit)="onRegister()" class="grid gap-2">
+            <label class="text-xs opacity-90">Full Name</label>
+            <input [(ngModel)]="regName" name="regName" type="text" required autocomplete="name"
+              class="w-full rounded-lg px-3 py-2.5 bg-black/30 border border-white/40 text-teal-50 placeholder-teal-200/60 focus:outline-none focus:ring-2 focus:ring-accent"
+              placeholder="Your name" />
+            <label class="text-xs opacity-90">Email</label>
+            <input [(ngModel)]="regEmail" name="regEmail" type="email" required autocomplete="email"
+              class="w-full rounded-lg px-3 py-2.5 bg-black/30 border border-white/40 text-teal-50 placeholder-teal-200/60 focus:outline-none focus:ring-2 focus:ring-accent"
+              placeholder="you@example.com" />
+            <label class="text-xs opacity-90">Password</label>
+            <input [(ngModel)]="regPass" name="regPass" type="password" required minlength="6" autocomplete="new-password"
+              class="w-full rounded-lg px-3 py-2.5 bg-black/30 border border-white/40 text-teal-50 placeholder-teal-200/60 focus:outline-none focus:ring-2 focus:ring-accent"
+              placeholder="At least 6 characters" />
+            <button type="submit" [disabled]="loading"
+              class="mt-2 px-4 py-2.5 rounded-lg font-bold text-sm bg-accent text-blend hover:brightness-110 disabled:opacity-70">
+              {{ loading ? 'Creating…' : 'Create Account' }}
+            </button>
+          </form>
+        </div>
+
+        <p class="text-[11px] text-white/80 mt-3 leading-snug shrink-0">
+          By continuing, you agree that your account is stored in this browser’s IndexedDB. You can sign out anytime from the header menu.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

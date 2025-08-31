@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Travelika — My Bookings</title>
+
+  <meta name="theme-color" content="#041b18">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <!-- Tailwind & Dexie -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { blend:'#041b18', accent:'#138374' },
+          boxShadow: { brand:'0 10px 30px rgba(0,0,0,.25)' }
+        }
+      }
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/dexie@4/dist/dexie.min.js"></script>
+</head>
+
+<body class="min-h-screen bg-slate-50 text-slate-900">
+  <!-- Header -->
+  <div data-include="/components/header.html"></div>
+
+  <main class="container mx-auto px-4 py-10">
+    <div class="flex items-start justify-between flex-wrap gap-4 mb-6">
+      <div>
+        <h1 class="text-2xl md:text-3xl font-semibold">My Bookings</h1>
+        <p class="text-slate-600">View and export bookings saved in this browser (IndexedDB).</p>
+      </div>
+      <a href="/" class="px-4 py-2 rounded-lg bg-accent text-blend font-bold hover:brightness-110">← Back to Home</a>
+    </div>
+
+    <!-- Controls -->
+    <div class="bg-white border border-slate-200 rounded-xl p-4 shadow">
+      <div class="grid gap-3 md:grid-cols-5 items-end">
+        <div class="md:col-span-2">
+          <label class="block text-sm text-slate-600 mb-1" for="q">Search</label>
+          <input id="q" type="search" placeholder="code, forest, pickup, email…"
+                 class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-accent"/>
+        </div>
+
+        <div>
+          <label class="block text-sm text-slate-600 mb-1" for="status">Status</label>
+          <select id="status" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-accent">
+            <option value="">All</option>
+            <option value="pending">Pending</option>
+            <option value="paid">Paid</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm text-slate-600 mb-1" for="sort">Sort</label>
+          <select id="sort" class="w-full rounded-lg px-3 py-2 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-accent">
+            <option value="createdAt_desc">Newest</option>
+            <option value="createdAt_asc">Oldest</option>
+            <option value="subtotal_desc">Total (High → Low)</option>
+            <option value="subtotal_asc">Total (Low → High)</option>
+          </select>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <label class="inline-flex items-center gap-2 text-sm">
+            <input id="onlyMine" type="checkbox" class="accent-accent">
+            <span>Only mine</span>
+          </label>
+          <button id="refreshBtn" class="ml-auto px-3 py-2 rounded-lg border border-slate-300 hover:bg-slate-50">Refresh</button>
+        </div>
+      </div>
+
+      <div class="mt-4 flex items-center justify-between flex-wrap gap-3">
+        <div class="text-sm text-slate-600">
+          <span id="count">0</span> results
+          <span id="mineHint" class="hidden"> • filtered by your account</span>
+        </div>
+        <div class="flex gap-2">
+          <button id="exportJson" class="px-3 py-2 rounded-lg border border-slate-300 hover:bg-slate-50">Export JSON</button>
+          <button id="exportCsv" class="px-3 py-2 rounded-lg border border-slate-300 hover:bg-slate-50">Export CSV</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- List -->
+    <div id="listWrap" class="mt-6">
+      <div id="empty" class="hidden text-center py-16">
+        <div class="text-4xl mb-2">🌲</div>
+        <p class="text-slate-700 font-medium">No bookings found</p>
+        <p class="text-slate-500 text-sm">Create a booking from the homepage.</p>
+        <a href="/#pesan" class="mt-4 inline-block px-4 py-2 rounded-lg bg-accent text-blend font-bold hover:brightness-110">Book now</a>
+      </div>
+
+      <div class="overflow-x-auto bg-white border border-slate-200 rounded-xl shadow">
+        <table class="min-w-[900px] w-full text-left">
+          <thead class="bg-slate-50 text-slate-600 text-sm">
+            <tr>
+              <th class="px-4 py-3">Code</th>
+              <th class="px-4 py-3">Forest</th>
+              <th class="px-4 py-3">Dates</th>
+              <th class="px-4 py-3">Guests</th>
+              <th class="px-4 py-3">Package</th>
+              <th class="px-4 py-3">Status</th>
+              <th class="px-4 py-3">Total</th>
+              <th class="px-4 py-3">Under</th>
+              <th class="px-4 py-3">Created</th>
+              <th class="px-4 py-3"></th>
+            </tr>
+          </thead>
+          <tbody id="tbody" class="text-sm"></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- Detail Modal -->
+  <div id="detailModal" class="fixed inset-0 z-50 hidden" aria-modal="true" role="dialog">
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" data-close-detail></div>
+    <div class="relative mx-auto max-w-2xl mt-20 bg-white rounded-2xl p-6 shadow-xl border border-slate-200">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <h3 class="text-lg font-bold text-slate-900">Booking detail</h3>
+          <p id="detailTitle" class="text-slate-600 text-sm mt-1"></p>
+        </div>
+        <button class="text-slate-400 hover:text-slate-600" aria-label="Close" data-close-detail>✕</button>
+      </div>
+      <pre id="detailBody" class="mt-4 text-xs bg-slate-50 border border-slate-200 rounded-lg p-3 overflow-auto max-h-[60vh]"></pre>
+      <div class="mt-5 flex justify-end gap-2">
+        <button id="copyDetail" class="px-4 py-2 rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50">Copy JSON</button>
+        <button class="px-4 py-2 rounded-lg bg-accent text-blend font-bold hover:brightness-110" data-close-detail>Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div data-include="/components/footer.html"></div>
+
+  <!-- Scripts -->
+  <script>
+    // ===== Dexie / DB open =====
+    const db = new Dexie('travelika');
+    db.version(1).stores({ users: 'email, name, passHash, createdAt' });
+    db.version(2).stores({
+      users: 'email, name, passHash, createdAt',
+      bookings: '++id, code, email, createdAt, forest, dateIn, dateOut, pkg'
+    });
+
+    // ===== Session =====
+    function getSession(){
+      const raw = (document.cookie.split('; ').find(r=>r.startsWith('travelika_session='))||'').split('=')[1];
+      if(!raw) return null;
+      try{ return JSON.parse(decodeURIComponent(raw)); }catch{ return null; }
+    }
+
+    // ===== Utils =====
+    const fmtIDR = n => new Intl.NumberFormat('id-ID', { style:'currency', currency:'IDR' }).format(n ?? 0);
+    const fmtDate = (ts) => {
+      if (!ts) return '-';
+      const d = new Date(ts);
+      return d.toLocaleString([], {year:'numeric', month:'short', day:'2-digit', hour:'2-digit', minute:'2-digit'});
+    };
+    const forestLabelMap = {
+      AMAZON:'Amazon, Brazil',
+      BORNEO:'Kalimantan (Borneo), Indonesia',
+      BLACK_FOREST:'Black Forest, Germany',
+      TONGASS:'Tongass, Alaska',
+      AOKIGAHARA:'Aokigahara, Japan',
+      OLYMPIC:'Olympic, USA',
+      DAINTREE:'Daintree, Australia'
+    };
+
+    // ===== DOM refs =====
+    const tbody = document.getElementById('tbody');
+    const empty = document.getElementById('empty');
+    const countEl = document.getElementById('count');
+    const mineHint = document.getElementById('mineHint');
+
+    const q = document.getElementById('q');
+    const statusSel = document.getElementById('status');
+    const sortSel = document.getElementById('sort');
+    const onlyMine = document.getElementById('onlyMine');
+    const refreshBtn = document.getElementById('refreshBtn');
+
+    // Detail modal
+    const detailModal = document.getElementById('detailModal');
+    const detailTitle = document.getElementById('detailTitle');
+    const detailBody = document.getElementById('detailBody');
+    const copyDetail = document.getElementById('copyDetail');
+
+    function openDetailModal(title, jsonObj){
+      detailTitle.textContent = title;
+      detailBody.textContent = JSON.stringify(jsonObj, null, 2);
+      detailModal.classList.remove('hidden');
+      document.body.classList.add('overflow-hidden');
+    }
+    function closeDetailModal(){
+      detailModal.classList.add('hidden');
+      document.body.classList.remove('overflow-hidden');
+    }
+    detailModal.addEventListener('click', (e)=>{
+      if (e.target.matches('[data-close-detail]')) closeDetailModal();
+    });
+    document.addEventListener('keydown', (e)=>{
+      if (e.key === 'Escape' && !detailModal.classList.contains('hidden')) closeDetailModal();
+    });
+    copyDetail.addEventListener('click', async ()=>{
+      try {
+        await navigator.clipboard.writeText(detailBody.textContent);
+        copyDetail.textContent = 'Copied!';
+        setTimeout(()=>copyDetail.textContent='Copy JSON', 1200);
+      } catch {}
+    });
+
+    // ===== Data load & render =====
+    async function loadBookings(){
+      const ses = getSession();
+      const mine = onlyMine.checked && ses?.email;
+      const qval = (q.value||'').trim().toLowerCase();
+      const status = statusSel.value;
+
+      let rows = await db.bookings.toArray();
+
+      // filter
+      rows = rows.filter(r => {
+        if (mine && r.email !== ses.email) return false;
+        if (status && r.status !== status) return false;
+        if (qval) {
+          const text = [
+            r.code, r.forest, forestLabelMap[r.forest] || '',
+            r.pickup, r.email, r.pkg, String(r.guests||''),
+            r.dateIn, r.dateOut
+          ].join(' ').toLowerCase();
+          if (!text.includes(qval)) return false;
+        }
+        return true;
+      });
+
+      // sort
+      const [key, dir] = sortSel.value.split('_'); // createdAt|subtotal, asc|desc
+      rows.sort((a,b)=>{
+        const va = key === 'createdAt' ? (a.createdAt||0) : (a.subtotal||0);
+        const vb = key === 'createdAt' ? (b.createdAt||0) : (b.subtotal||0);
+        return dir === 'asc' ? va - vb : vb - va;
+      });
+
+      render(rows, !!mine);
+    }
+
+    function render(rows, isMine){
+      tbody.innerHTML = '';
+      countEl.textContent = rows.length;
+      mineHint.classList.toggle('hidden', !isMine);
+
+      if (!rows.length){
+        empty.classList.remove('hidden');
+        return;
+      }
+      empty.classList.add('hidden');
+
+      for (const r of rows){
+        const tr = document.createElement('tr');
+        tr.className = 'border-t border-slate-100 hover:bg-slate-50 transition';
+
+        const forestLabel = forestLabelMap[r.forest] || r.forest || '-';
+        const dates = r.dateIn + (r.dayTrip ? ' (day trip)' : (r.dateOut ? ' — ' + r.dateOut : ''));
+        const addons = `${r.needTransport ? '🚐' : ''}${r.needLodging ? ' 🏨' : ''}`;
+        const statusPill = r.status === 'paid'
+          ? '<span class="px-2 py-0.5 rounded-full text-xs bg-emerald-100 text-emerald-700">Paid</span>'
+          : '<span class="px-2 py-0.5 rounded-full text-xs bg-amber-100 text-amber-700">Pending</span>';
+
+        tr.innerHTML = `
+          <td class="px-4 py-3 font-mono text-xs text-slate-700">${r.code || '-'}</td>
+          <td class="px-4 py-3">
+            <div class="font-medium">${forestLabel}</div>
+            <div class="text-xs text-slate-500">${r.pickup || '-'} ${addons ? ' • ' + addons : ''}</div>
+          </td>
+          <td class="px-4 py-3">${dates || '-'}</td>
+          <td class="px-4 py-3">${r.guests ?? '-'}</td>
+          <td class="px-4 py-3 capitalize">${r.pkg || '-'}</td>
+          <td class="px-4 py-3">${statusPill}</td>
+          <td class="px-4 py-3 font-semibold">${fmtIDR(r.subtotal)}</td>
+          <td class="px-4 py-3 text-xs">${r.email || '-'}</td>
+          <td class="px-4 py-3 text-xs text-slate-500">${fmtDate(r.createdAt)}</td>
+          <td class="px-4 py-3">
+            <button class="px-3 py-1.5 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-50" data-detail="${r.id}">Detail</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      }
+
+      // hook detail buttons
+      tbody.querySelectorAll('[data-detail]').forEach(btn=>{
+        btn.addEventListener('click', async ()=>{
+          const id = Number(btn.getAttribute('data-detail'));
+          const row = await db.bookings.get(id);
+          if (row) openDetailModal(`${row.code} • ${forestLabelMap[row.forest]||row.forest}`, row);
+        });
+      });
+    }
+
+    // ===== Events =====
+    [q, statusSel, sortSel, onlyMine].forEach(el=>{
+      el.addEventListener('input', () => loadBookings());
+      el.addEventListener('change', () => loadBookings());
+    });
+    refreshBtn.addEventListener('click', () => loadBookings());
+
+    // If not logged in, disable Only mine (but still show all bookings as requested)
+    const ses = getSession();
+    if (!ses) {
+      onlyMine.checked = false;
+      onlyMine.disabled = true;
+      onlyMine.parentElement.classList.add('opacity-60');
+      onlyMine.parentElement.title = 'Sign in to filter by your account';
+    } else {
+      // default: Only mine ON
+      onlyMine.checked = true;
+    }
+
+    // initial
+    loadBookings();
+  </script>
+
+  <!-- include loader (header/footer) -->
+  <script src="/components/include-components.js" defer></script>
+</body>
+</html>

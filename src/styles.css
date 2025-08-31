@@ -1,1 +1,52 @@
 /* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Smooth anchor scrolling handled by Lenis (avoid double smoothing) */
+html { scroll-behavior: auto; }
+
+/* Tema warna putih–hijau */
+:root {
+  --accent: #10b981;      /* emerald-500 */
+  --accent-100: #ecfdf5;  /* hijau muda */
+  --accent-200: #d1fae5;
+  --track: #ffffff;       /* putih (track) */
+  --thumb: var(--accent); /* hijau (thumb) */
+  --thumb-hover: #0ea371;
+}
+
+/* Scrollbar (Firefox) */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--thumb) var(--track);
+}
+
+/* Scrollbar (WebKit) */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--track); }
+::-webkit-scrollbar-thumb {
+  background: var(--thumb);
+  border-radius: 999px;
+  border: 2px solid var(--track);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--thumb-hover); }
+
+/* Hindari overflow horizontal */
+:root, html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Optional: highlight selection */
+::selection { background: var(--accent-200); color: #064e3b; }
+
+/* Payment option cards */
+.pay-option {
+  transition: background-color .15s ease, border-color .15s ease, box-shadow .15s ease;
+}
+.pay-option.selected {
+  background: #f0fdfa; /* teal-50 */
+  border-color: #14b8a6; /* teal-500 */
+  box-shadow: inset 0 0 0 2px rgba(20, 184, 166, 0.25);
+}

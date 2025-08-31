@@ -25,11 +25,6 @@
                 "output": "/"
               },
               {
-                "glob": "login.html",
-                "input": "src/",
-                "output": "/"
-              },
-              {
                 "glob": "**/*",
                 "input": "src/components",
                 "output": "/components"
