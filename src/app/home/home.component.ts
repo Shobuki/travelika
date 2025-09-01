@@ -1,4 +1,4 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy } from '@angular/core';
 import { HeaderComponent } from '../components/header/header.component'; // <--- import header
 import { FooterComponent } from '../components/footer/footer.component';
 import { computePricing, pricingConstants } from '../lib/pricing';
@@ -11,7 +11,10 @@ import { computePricing, pricingConstants } from '../lib/pricing';
   templateUrl: './home.component.html',
   //styleUrls: ['./home.component.css']
 })
-export class HomeComponent implements AfterViewInit {
+export class HomeComponent implements AfterViewInit, OnDestroy {
+  private rainRAF = 0;
+  private rainRO?: ResizeObserver;
+  private stopRainFn?: () => void;
   // ---- IndexedDB helpers (native, align with login/mybookings) ----
   private openDB(): Promise<IDBDatabase> {
     return new Promise((resolve, reject) => {
@@ -91,6 +94,9 @@ export class HomeComponent implements AfterViewInit {
     // If elements are not present (SSR or different view), just no-op
     const form = document.getElementById('bookingForm') as HTMLFormElement | null;
     if (!form) return;
+
+    // Setup hero rain effect
+    try { this.setupHeroRain(); } catch {}
 
     // Refs
     const forest = document.getElementById('forest') as HTMLSelectElement | null;
@@ -620,6 +626,110 @@ You can see it in My Bookings.`;
         if (!calcModal?.classList.contains('hidden')) refreshCalcModal();
       });
     });
+  }
+
+  ngOnDestroy(): void {
+    // Stop rain animation
+    if (this.stopRainFn) { try { this.stopRainFn(); } catch {} }
+  }
+
+  private setupHeroRain() {
+    // Respect reduced motion unless body.anim-on overrides
+    const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
+    if (reduce && !document.body.classList.contains('anim-on')) return;
+
+    const hero = document.getElementById('hero') as HTMLElement | null;
+    const canvas = document.getElementById('rainCanvas') as HTMLCanvasElement | null;
+    if (!hero || !canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+    let width = 0, height = 0;
+
+    type Drop = { x: number; y: number; len: number; spd: number; wind: number };
+    let drops: Drop[] = [];
+    let last = performance.now();
+
+    const cfg = {
+      density: 0.15,         // drops per css px^2 factor
+      baseSpeed: 900,        // px/s baseline
+      speedVar: 700,         // variability
+      baseLen: 14,           // px
+      lenVar: 12,            // variability
+      wind: 140,             // px/s horizontal drift
+      color: 'rgba(255,255,255,0.28)',
+      lineWidth: 1.0,
+    };
+
+    function rand(min: number, max: number) { return Math.random() * (max - min) + min; }
+
+    const resize = () => {
+      const rect = hero.getBoundingClientRect();
+      const cssW = Math.max(1, Math.floor(rect.width));
+      const cssH = Math.max(1, Math.floor(rect.height));
+      width = cssW * dpr; height = cssH * dpr;
+      canvas.width = width; canvas.height = height;
+      canvas.style.width = cssW + 'px';
+      canvas.style.height = cssH + 'px';
+
+      // Number of drops scales with area, capped for perf
+      const area = cssW * cssH;
+      const target = Math.min(350, Math.max(80, Math.floor(area * cfg.density / 3500)));
+      drops = new Array(target).fill(0).map(() => ({
+        x: rand(0, cssW) * dpr,
+        y: rand(-cssH, cssH) * dpr,
+        len: (cfg.baseLen + rand(-cfg.lenVar, cfg.lenVar)) * dpr,
+        spd: (cfg.baseSpeed + rand(-cfg.speedVar, cfg.speedVar)),
+        wind: cfg.wind + rand(-60, 60),
+      }));
+    };
+
+    resize();
+    let usedWindowListener = false;
+    if (typeof (window as any).ResizeObserver !== 'undefined') {
+      this.rainRO = new ResizeObserver(() => resize());
+      this.rainRO.observe(hero);
+    } else {
+      usedWindowListener = true;
+      window.addEventListener('resize', resize);
+    }
+
+    ctx.strokeStyle = cfg.color;
+
+    const step = (now: number) => {
+      const dt = Math.min(66, now - last) / 1000; // clamp to avoid huge jumps
+      last = now;
+      // clear
+      ctx.clearRect(0, 0, width, height);
+      ctx.lineWidth = cfg.lineWidth * dpr;
+      ctx.beginPath();
+      for (let i = 0; i < drops.length; i++) {
+        const dr = drops[i];
+        const dx = dr.wind * dt * dpr;
+        const dy = dr.spd * dt * dpr;
+        dr.x += dx; dr.y += dy;
+        // wrap
+        if (dr.y - dr.len > height || dr.x > width + 40 * dpr) {
+          dr.x = rand(-40, canvas.clientWidth + 40) * dpr;
+          dr.y = rand(-canvas.clientHeight, -20) * dpr;
+        }
+        // draw as a short slanted segment
+        ctx.moveTo(dr.x, dr.y);
+        ctx.lineTo(dr.x - dr.wind * 0.02 * dpr, dr.y - dr.len);
+      }
+      ctx.stroke();
+      this.rainRAF = requestAnimationFrame(step);
+    };
+    this.rainRAF = requestAnimationFrame(step);
+
+    this.stopRainFn = () => {
+      if (this.rainRAF) cancelAnimationFrame(this.rainRAF);
+      this.rainRAF = 0;
+      if (this.rainRO) this.rainRO.disconnect();
+      if (usedWindowListener) window.removeEventListener('resize', resize);
+    };
   }
 
   private async saveBookingAndMarkPaid(payload: any): Promise<{ id: number; code: string; email: string }> {

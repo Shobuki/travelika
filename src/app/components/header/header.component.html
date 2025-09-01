@@ -1,6 +1,6 @@
 <header
   class="fixed top-0 inset-x-0 h-16 z-30 flex items-center backdrop-blur bg-[rgba(4,27,24,0.40)] border-b border-white/50 text-white">
-  <div class="container mx-auto px-4 flex items-center justify-between">
+  <div class="relative w-full px-4 flex items-center justify-between">
     <!-- Brand -->
     <a [routerLink]="['/']" class="flex items-center gap-2 font-bold">
       <span class="w-2.5 h-2.5 rounded-full bg-accent shadow-[0_0_10px_theme(colors.accent)]"></span>
@@ -8,20 +8,12 @@
     </a>
 
     <!-- Nav -->
-    <nav class="hidden md:flex items-center gap-6 text-sm opacity-90">
+    <nav class="hidden md:flex items-center gap-6 text-sm opacity-90 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
       <a [routerLink]="['/']" fragment="destinasi" class="hover:opacity-100">Forests</a>
       <a [routerLink]="['/']" fragment="cara" class="hover:opacity-100">How It Works</a>
       <a [routerLink]="['/']" fragment="keunggulan" class="hover:opacity-100">Benefits</a>
 
-      <!-- Book History (selalu ada; badge saat login) -->
-      <a href="/mybookings" (click)="goBookHistory($event)" class="hover:opacity-100 relative flex items-center gap-2">
-        Book History
-        <span
-          *ngIf="ses?.email && bookingCount > 0"
-          class="text-[10px] leading-none px-1.5 py-1 rounded-full bg-white/20 border border-white/30">
-          {{ bookingCount }}
-        </span>
-      </a>
+
     </nav>
 
     <!-- Area auth -->
@@ -46,19 +38,15 @@
 
         <div
           class="absolute right-0 mt-2 w-52 rounded-xl bg-white text-slate-700 shadow-lg border border-slate-200 overflow-hidden"
-          [class.hidden]="!dropdownOpen"
-          (click)="$event.stopPropagation()">
+          [class.hidden]="!dropdownOpen" (click)="$event.stopPropagation()">
           <a [routerLink]="['/']" class="block px-3 py-2 hover:bg-slate-50">Beranda</a>
           <a [routerLink]="['/']" fragment="pesan" class="block px-3 py-2 hover:bg-slate-50">Pesan Pass</a>
           <a href="/mybookings" (click)="goBookHistory($event)"
-             class="block px-3 py-2 hover:bg-slate-50 flex items-center justify-between">
+            class="block px-3 py-2 hover:bg-slate-50 flex items-center justify-between">
             <span>Book History</span>
-            <span *ngIf="bookingCount > 0"
-              class="text-[10px] leading-none px-1.5 py-1 rounded-full bg-slate-100 border border-slate-200">
-              {{ bookingCount }}
-            </span>
           </a>
-          <button (click)="openResetConfirm($event)" class="w-full text-left px-3 py-2 hover:bg-slate-50 text-amber-700">Reset Data</button>
+          <button (click)="openResetConfirm($event)"
+            class="w-full text-left px-3 py-2 hover:bg-slate-50 text-amber-700">Reset Data</button>
           <button (click)="logout()" class="w-full text-left px-3 py-2 hover:bg-slate-50 text-red-600">Keluar</button>
         </div>
       </div>
@@ -68,7 +56,8 @@
 <!-- Reset Data Confirm Modal -->
 <div *ngIf="resetOpen" class="fixed inset-0 z-50" aria-modal="true" role="dialog">
   <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" (click)="closeResetConfirm()"></div>
-  <div class="relative mx-auto max-w-md w-[calc(100%-2rem)] mt-24 bg-white rounded-2xl p-6 shadow-xl border border-slate-200">
+  <div
+    class="relative mx-auto max-w-md w-[calc(100%-2rem)] mt-24 bg-white rounded-2xl p-6 shadow-xl border border-slate-200">
     <div class="flex items-start justify-between gap-4">
       <div>
         <h3 class="text-lg font-bold text-slate-900">Reset Transaction Data</h3>
@@ -80,8 +69,11 @@
       Affected stores: <span class="font-mono">bookings</span>, <span class="font-mono">payments</span>.
     </div>
     <div class="mt-5 flex justify-end gap-2">
-      <button class="px-4 py-2 rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50" (click)="closeResetConfirm()" [disabled]="resetLoading">Cancel</button>
-      <button class="px-4 py-2 rounded-lg bg-amber-600 text-white font-bold hover:brightness-110 disabled:opacity-60 disabled:cursor-not-allowed" (click)="confirmReset()" [disabled]="resetLoading">
+      <button class="px-4 py-2 rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50"
+        (click)="closeResetConfirm()" [disabled]="resetLoading">Cancel</button>
+      <button
+        class="px-4 py-2 rounded-lg bg-amber-600 text-white font-bold hover:brightness-110 disabled:opacity-60 disabled:cursor-not-allowed"
+        (click)="confirmReset()" [disabled]="resetLoading">
         {{ resetLoading ? 'Resetting…' : 'Yes, Reset' }}
       </button>
     </div>

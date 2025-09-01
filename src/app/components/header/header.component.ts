@@ -102,6 +102,29 @@ export class HeaderComponent {
     });
   }
 
+  private async clearAllStores(db: IDBDatabase): Promise<void> {
+    const names: string[] = Array.from(db.objectStoreNames as any);
+    for (const n of names) {
+      await this.clearStore(db, n);
+    }
+  }
+
+  private clearCookie(name: string) {
+    document.cookie = `${name}=; Max-Age=0; path=/; SameSite=Lax` +
+      (location.protocol === 'https:' ? '; Secure' : '');
+  }
+
+  private deleteDatabase(): Promise<void> {
+    return new Promise((resolve) => {
+      try {
+        const req = indexedDB.deleteDatabase('travelika');
+        req.onsuccess = () => resolve();
+        req.onerror = () => resolve();
+        req.onblocked = () => resolve();
+      } catch { resolve(); }
+    });
+  }
+
   async confirmReset() {
     try {
       this.resetLoading = true;

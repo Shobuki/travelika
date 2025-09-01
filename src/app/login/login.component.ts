@@ -94,6 +94,10 @@ export class LoginComponent implements OnInit {
   // IndexedDB instance
   private db: IDBDatabase | null = null;
 
+  // Reset-all modal state
+  resetOpen = false;
+  resetLoading = false;
+
   async ngOnInit() {
     // Buka DB (native IndexedDB)
     this.db = await openDB();
@@ -225,4 +229,87 @@ export class LoginComponent implements OnInit {
     this.tab.set(to);
     this.errorMsg = '';
   }
+
+  // ===== Reset ALL data (users, bookings, payments) =====
+  openResetAll() { this.resetOpen = true; }
+  closeResetAll() { if (!this.resetLoading) this.resetOpen = false; }
+
+  private clearCookie(name: string) {
+    document.cookie = `${name}=; Max-Age=0; path=/; SameSite=Lax` +
+      (location.protocol === 'https:' ? '; Secure' : '');
+  }
+
+  private clearStore(db: IDBDatabase, store: string): Promise<void> {
+    return new Promise((resolve) => {
+      try {
+        const tx = db.transaction(store, 'readwrite');
+        tx.oncomplete = () => resolve();
+        tx.onerror = () => resolve();
+        tx.onabort = () => resolve();
+        tx.objectStore(store).clear();
+      } catch { resolve(); }
+    });
+  }
+
+  private async clearAllStores(db: IDBDatabase): Promise<void> {
+    const names: string[] = Array.from(db.objectStoreNames as any);
+    for (const n of names) {
+      await this.clearStore(db, n);
+    }
+  }
+
+  private deleteDatabase(): Promise<void> {
+    return new Promise((resolve) => {
+      try {
+        const req = indexedDB.deleteDatabase('travelika');
+        req.onsuccess = () => resolve();
+        req.onerror = () => resolve();
+        req.onblocked = () => resolve();
+      } catch { resolve(); }
+    });
+  }
+
+  async confirmResetAll() {
+    this.resetLoading = true;
+    try {
+      // Close own connection if any to avoid self-blocking
+      try { this.db?.close(); } catch {}
+
+      // Try full DB delete first
+      await this.deleteDatabase();
+
+      // Fallback: if some tabs keep it open, clear all stores manually (no upgrade)
+      try {
+        const db = await openDBNoUpgrade();
+        await this.clearAllStores(db);
+        db.close();
+      } catch {}
+
+      // Clear cookies (session + prefill)
+      this.clearCookie('travelika_session');
+      this.clearCookie('travelika_visit');
+
+      this.resetOpen = false;
+      this.infoMsg = 'All local data (accounts, bookings, payments) has been reset.';
+    } finally {
+      this.resetLoading = false;
+    }
+  }
+}
+
+// Open DB without forcing a version bump (avoid blocked upgrades)
+function openDBNoUpgrade(): Promise<IDBDatabase> {
+  return new Promise((resolve, reject) => {
+    try {
+      const req = indexedDB.open('travelika');
+      req.onupgradeneeded = () => {
+        const db = req.result;
+        if (!db.objectStoreNames.contains('users')) db.createObjectStore('users', { keyPath: 'email' });
+        if (!db.objectStoreNames.contains('bookings')) db.createObjectStore('bookings', { keyPath: 'id', autoIncrement: true });
+        if (!db.objectStoreNames.contains('payments')) db.createObjectStore('payments', { keyPath: 'id', autoIncrement: true });
+      };
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    } catch (e) { reject(e as any); }
+  });
 }

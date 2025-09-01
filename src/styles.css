@@ -8,34 +8,79 @@ html { scroll-behavior: auto; }
 
 /* Tema warna putih–hijau */
 :root {
+  --page-bg: #041b18;
   --accent: #10b981;      /* emerald-500 */
   --accent-100: #ecfdf5;  /* hijau muda */
   --accent-200: #d1fae5;
-  --track: #ffffff;       /* putih (track) */
+  /* Scrollbar track color — keep transparent to avoid visible right gutter */
+  --track: transparent;
   --thumb: var(--accent); /* hijau (thumb) */
   --thumb-hover: #0ea371;
+  --scrollbar-w: 10px;
 }
 
 /* Scrollbar (Firefox) */
 * {
   scrollbar-width: thin;
-  scrollbar-color: var(--thumb) var(--track);
+  /* Transparent track to prevent a dark strip beside the content */
+  scrollbar-color: var(--thumb) transparent;
 }
 
 /* Scrollbar (WebKit) */
-::-webkit-scrollbar { width: 10px; height: 10px; }
-::-webkit-scrollbar-track { background: var(--track); }
+::-webkit-scrollbar { width: var(--scrollbar-w); height: 10px; }
+/* Transparent track so content appears to reach the edge */
+::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb {
   background: var(--thumb);
   border-radius: 999px;
-  border: 2px solid var(--track);
+  /* No contrasting border so the track doesn't look like extra gutter */
+  border: 2px solid transparent;
 }
 ::-webkit-scrollbar-thumb:hover { background: var(--thumb-hover); }
 
-/* Hindari overflow horizontal */
-:root, html, body {
-  max-width: 100%;
-  overflow-x: hidden;
+/* Hindari overflow horizontal tanpa menjadikan html scroll container */
+:root, html { max-width: 100%; }
+body { overflow-x: clip; }
+
+/* Base page background (visible behind transparent areas) */
+html { background-color: var(--page-bg); }
+
+/* ===== Animations ===== */
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(8px); filter: blur(4px); }
+  to   { opacity: 1; transform: none;           filter: none; }
+}
+@keyframes pageOut {
+  from { opacity: 1; transform: none; }
+  to   { opacity: 0; transform: translateY(6px); }
+}
+
+/* Page transition: animate the current view wrapper (slower for readability) */
+.page-enter [data-page] { animation: pageIn 1s cubic-bezier(.22,1,.36,1) both; }
+.page-leave [data-page] { animation: pageOut .6s ease both; }
+
+/* Scroll reveal — apply to elements with [data-reveal] or inside [data-auto-reveal] */
+[data-reveal], [data-auto-reveal] > :not(.fixed) {
+  opacity: 0;
+  transform: var(--reveal-from, translateY(12px));
+  /* Slower reveal for human-friendly pacing */
+  transition: transform .9s cubic-bezier(.22,1,.36,1), opacity .9s cubic-bezier(.22,1,.36,1);
+  will-change: transform, opacity;
+}
+[data-reveal].is-visible, [data-auto-reveal] > :not(.fixed).is-visible { opacity: 1; transform: none; }
+/* Directions */
+[data-reveal="up"]   { --reveal-from: translateY(14px); }
+[data-reveal="down"] { --reveal-from: translateY(-14px); }
+[data-reveal="left"] { --reveal-from: translateX(-16px); }
+[data-reveal="right"]{ --reveal-from: translateX(16px); }
+[data-reveal="zoom"] { --reveal-from: scale(.96); }
+
+/* Reduce motion for accessibility (can be overridden with body.anim-on) */
+@media (prefers-reduced-motion: reduce) {
+  body:not(.anim-on) *, body:not(.anim-on) *::before, body:not(.anim-on) *::after {
+    animation: none !important;
+    transition: none !important;
+  }
 }
 
 /* Optional: highlight selection */
